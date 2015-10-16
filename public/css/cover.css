@@ -1,0 +1,67 @@
+/* Extra markup and styles for table-esque vertical and horizontal centering */
+/* Padding for spacing */
+.inner {
+border-bottom:transparent;
+}
+
+/*
+ * Header
+ */
+
+.masthead-nav > li {
+  display: inline-block;
+}
+.masthead-nav > li + li {
+  margin-left: 20px;
+}
+.masthead-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  font-size:15px;
+  color: #777;
+}
+.masthead-nav > li > a:hover, 
+.masthead-nav > li > a:focus{
+	background-color:transparent;
+	color:black;
+}
+.masthead-nav > .active > a,
+.masthead-nav > .active > a:hover,
+.masthead-nav > .active > a:focus {
+  background-color:transparent;
+  font-weight:bold;
+  color:black;
+  border-bottom: 3px solid #f15727;
+}
+
+@media (min-width: 768px) {
+  .masthead-nav {
+    float: left;
+  }
+}
+
+
+/
+
+/*
+ * Affix and center
+ */
+
+@media (min-width: 768px) {
+  /* Pull out the header and footer */
+  .masthead {
+    position: fixed;
+    top: 0;
+  }
+
+  /* Handle the widths */
+  .masthead{
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 992px) {
+  .masthead {
+    width: 100%;
+  }
+}
