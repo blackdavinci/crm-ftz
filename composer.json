@@ -16,7 +16,8 @@
         "barryvdh/laravel-debugbar": "^2.0",
         "laravelcollective/html": "^5.1",
         "maddhatter/laravel-fullcalendar": "~1.0",
-        "nicolaslopezj/searchable": "1.*"
+        "nicolaslopezj/searchable": "1.*",
+         "kyslik/column-sortable": "~3.0.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
