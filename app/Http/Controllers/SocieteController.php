@@ -37,7 +37,7 @@ class SocieteController extends Controller {
 	{
 		//
 		$societes = new Societe;
-		$societe = $societes->sortable()->where('etat',1)->get();
+		
 
 
 		//$societe = Societe::where('etat',1)->orderBy('nom_clt','asc')->get();
@@ -46,19 +46,50 @@ class SocieteController extends Controller {
 		if(isset($_GET['sort'])){
 			if($_GET['sort']=='pays_clt'){
 				$tri = 'pays';
+				$societe = $societes->sortable()->where('etat',1)->get();
 			}elseif($_GET['sort']=='statut'){
 				$tri = 'client';
+				$societe = $societes->sortable()->where('etat',1)->get();
 			}elseif($_GET['sort']=='created_at'){
 				$tri = 'ajout';
+				$societe = $societes->sortable()->where('etat',1)->get();
 			}elseif($_GET['sort']=='updated_at'){
 				$tri = 'modif';
+				$societe = $societes->sortable()->where('etat',1)->get();
 			}elseif($_GET['sort']=='nom_clt'){
 				$tri = 'alpha';
+				$societe = $societes->sortable()->where('etat',1)->get();
 			}elseif($_GET['sort']=='ville_siege_clt'){
 				$tri = 'ville';
+				$societe = $societes->sortable()->where('etat',1)->get();
+			}elseif('notes'){
+				$note = DB::table('societes')
+				            ->join('contacts', 'societes.id', '=', 'contacts.societe_id')
+				            ->join('notes', 'contacts.id', '=', 'notes.contact_id')
+				            ->select('societes.*', 'notes.*')->where('societes.etat',1)
+				            ->get();
+				$societes = Societe::where('etat',1)->orderBy('nom_clt','asc')->get();
+				$tri = 'notes';
+
+				// Tri des contacts sans note
+				foreach ($societes as $key => $value) {
+					$exist = 0;
+					foreach ($note as $keyn => $valuen) {
+						if($value->nom_clt == $valuen->nom_clt){
+							$exist = 1;
+						}
+					}
+
+					if($exist==0){
+						$societe [] = $value;
+					}
+						
+				}
 			}	
+			
 		}else{
-			$tri = 'none';
+			$tri = 'alpha';
+			$societe = $societes->where('etat',1)->orderBy('nom_clt','asc')->get();
 		}
 		
 		return view('contact.contact', compact('actif','societe','type','tri'));

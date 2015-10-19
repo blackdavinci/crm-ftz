@@ -10,6 +10,7 @@
 			<td class="sorting">@sortablelink ('statut', 'Catégorie')</td>
 			<td class="sorting">@sortablelink ('created_at', 'Date d\'ajout')</td>
 			<td class="sorting">@sortablelink ('updated_at', 'Date de modification')</td>
+			<td class="sorting">@sortablelink ('notes', 'Contact sans notes')</td>
 		</tr>
 	</table>
 
@@ -24,7 +25,7 @@
 			{{--*/ $today = date('Y-m-d', strtotime($societev->created_at)); $marquer = 0; /*--}}
 		@endif
 		@if($today == date('Y-m-d', strtotime($societev->created_at)) &&  $marquer == 0)
-			{{--*/ $date = $societev->created_at /*--}}
+			{{--*/ $date = $societev->created_at->format('d/m/Y') /*--}}
 			<tr class="active">
 				<td colspan="6"><h4 class="letter">{!! $date !!}</h4></td>
 			</tr>
@@ -36,7 +37,7 @@
 			{{--*/ $today = date('Y-m-d', strtotime($societev->updated_at)); $marquer = 0; /*--}}
 		@endif
 		@if($today == date('Y-m-d', strtotime($societev->updated_at)) &&  $marquer == 0)
-			{{--*/ $date = $societev->updated_at /*--}}
+			{{--*/ $date = $societev->updated_at->format('d/m/Y')/*--}}
 			<tr class="active">
 				<td colspan="6"><h4 class="letter">{!! $date !!}</h4></td>
 			</tr>
@@ -92,34 +93,33 @@
 			</tr>
 			{{--*/ $marquer = 1; /*--}}
 		@endif
-		@if($letter == null && $marquer == 0)
+		@if($letter == null)
 			<tr class="active">
-				<td colspan="6"><h4 class="letter" style="margin-top:-15px" >Aucun pays attribué</h4></td>
+				<td colspan="6"><h4 class="letter" >Aucun pays attribué</h4></td>
 			</tr>
 			{{--*/ $marquer = 1; /*--}}
 		@endif
 	<!-- Tri par ville  -->
 	@elseif($tri == 'ville' )
-		
 		@if($letter != $societev->ville_siege_clt)
 			{{--*/ $letter = $societev->ville_siege_clt; $marquer = 0; $idletter = substr($letter,0,1); /*--}}
+			
 		@endif
-		@if($letter == $societev->ville_siege_clt &&  $marquer == 0)
+		@if($letter == $societev->ville_siege_clt &&  $marquer == 0 && $letter !=null)
 			<tr class="active">
 				<td colspan="6"><h4 class="letter" id="{{ $idletter }}" >{!! $letter !!}</h4></td>
 			</tr>
 			{{--*/ $marquer = 1; /*--}}
 		@endif
-		@if($letter == null )
-			@if($cnull ==0)
-				{{--*/ $letter = 'Aucune ville attribuée'; $marquer = 0; $idletter = substr($letter,0,1); /*--}}
-			@endif
-			@if($letter == null &&  $marquer == 0)
-				<tr class="active">
-					<td colspan="6"><h4 class="letter" >{{ $letter }}</h4></td>
-				</tr>
-			@endif
-			{{--*/ $marquer = 1; $cnull =1; /*--}}
+		@if($letter == null && $cnull==0)
+			{{--*/ $letter = 'Aucune ville attribuée'; $marquer = 0; $idletter = substr($letter,0,1); /*--}}
+			
+		@endif
+		@if($letter == 'Aucune ville attribuée' && $marquer == 0)
+			<tr class="active">
+				<td colspan="6"><h4 class="letter" >{!! $letter !!}</h4></td>
+			</tr>
+			{{--*/ $marquer = 1; $cnull = 1/*--}}
 		@endif
 	<!-- Tri par prospect client -->
 	@elseif($tri == 'client')

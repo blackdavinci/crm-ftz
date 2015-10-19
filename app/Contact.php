@@ -6,7 +6,7 @@ use Kyslik\ColumnSortable\Sortable;
 
 class Contact extends Model {
 
-	use SearchableTrait;
+	use SearchableTrait, Sortable;
 
 	//
 	protected $guarded = ['timestamps'];
@@ -18,6 +18,14 @@ class Contact extends Model {
 	      $this->searchable = $value;
 	}
 
+	protected $sortable = [
+                           'nom_contact',
+                           'societe_id',
+                           'pays_clt',
+                           'ville_siege_clt',
+                           'statut', 
+                           'created_at', 
+                           'updated_at']; 
 
 	
 	public function societe(){

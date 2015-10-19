@@ -1,5 +1,18 @@
 <!-- Affichage Liste des contacts -->
-<!-- Checkbox Name Counter -->
+<!-- Compteur pour les éléments null -->
+{{--*/ $cnull = 0; /*--}}
+	<table class="table">
+		<tr class="active">
+			<td></td>
+			<td class="sorting">@sortablelink ('nom_contact', 'Nom')</td>
+			<td class="sorting">@sortablelink ('societe_id', 'Société')</td>
+			<td class="sorting">@sortablelink ('pays_clt', 'Pays')</td>
+			<td class="sorting">@sortablelink ('ville_siege_clt', 'Ville')</td>
+			<td class="sorting">@sortablelink ('statut', 'Catégorie')</td>
+			<td class="sorting">@sortablelink ('created_at', 'Date d\'ajout')</td>
+			<td class="sorting">@sortablelink ('updated_at', 'Date de modification')</td>
+		</tr>
+	</table>
 
 	<table class="table table-noborder-top table-bordere table-contact">
 			@foreach($contact as $contact)
@@ -10,9 +23,9 @@
 			{{--*/ $today = date('Y-m-d', strtotime($contact->created_at)); $marquer = 0; /*--}}
 		@endif
 		@if($today == date('Y-m-d', strtotime($contact->created_at)) &&  $marquer == 0)
-			{{--*/ $date = $formatter->format(strtotime($contact->created_at)) /*--}}
+			{{--*/ $date = $contact->created_at->format('d/m/Y') /*--}}
 			<tr class="active">
-				<td colspan="3"><h4 class="letter">{!! $date !!}</h4></td>
+				<td colspan="6"><h4 class="letter">{!! $date !!}</h4></td>
 			</tr>
 			{{--*/ $marquer = 1; /*--}}
 		@endif
@@ -22,9 +35,9 @@
 			{{--*/ $today = date('Y-m-d', strtotime($contact->updated_at)); $marquer = 0; /*--}}
 		@endif
 		@if($today == date('Y-m-d', strtotime($contact->updated_at)) &&  $marquer == 0)
-			{{--*/ $date = $formatter->format(strtotime($contact->updated_at)) /*--}}
+			{{--*/ $date = $contact->updated_at->format('d/m/Y') /*--}}
 			<tr class="active">
-				<td colspan="3"><h4 class="letter">{!! $date !!}</h4></td>
+				<td colspan="6"><h4 class="letter">{!! $date !!}</h4></td>
 			</tr>
 			{{--*/ $marquer = 1; /*--}}
 		@endif
@@ -36,7 +49,7 @@
 		@endif
 		@if($letter == ucfirst(substr($contact->nom_contact,0,1)) &&  $marquer == 0)
 			<tr class="active">
-				<td colspan="3"><h4 class="letter" id="{{ $letter }}" >{!! $letter !!}</h4></td>
+				<td colspan="6"><h4 class="letter" id="{{ $letter }}" >{!! $letter !!}</h4></td>
 			</tr>
 			{{--*/ $marquer = 1; /*--}}
 		@endif
@@ -52,14 +65,14 @@
 		@endif
 		@if($letter == $contact->nom_groupe.' '.$contact->date_groupe &&  $marquer == 0)
 			<tr class="active">
-				<td colspan="3"><h4 class="letter" id="{{ $ancre }}" >{!! $letter !!}</h4></td>
+				<td colspan="6"><h4 class="letter" id="{{ $ancre }}" >{!! $letter !!}</h4></td>
 			</tr>
 
 			{{--*/ $marquer = 1; /*--}}
 		@endif
 		@if($contact->groupe_id==0 && $none == 0 )
 			<tr class="active">
-				<td colspan="3" style="padding-top:0px;"><h4  class="letter" >Aucun Groupe'</h4></td>
+				<td colspan="6" style="padding-top:0px;"><h4  class="letter" >Aucun Groupe'</h4></td>
 			</tr>
 
 			{{--*/ $none = 1; /*--}}
@@ -74,32 +87,74 @@
 		@endif
 		@if($letter == $contact->pays_clt &&  $marquer == 0)
 			<tr class="active">
-				<td colspan="3"><h4 class="letter" id="{{ $idletter }}" >{!! $letter !!}</h4></td>
+				<td colspan="6"><h4 class="letter" id="{{ $idletter }}" >{!! $letter !!}</h4></td>
 			</tr>
 			{{--*/ $marquer = 1; /*--}}
 		@if($letter == null)
 			<tr class="active">
-				<td colspan="3"><h4 class="letter" style="margin-top:-15px" >Aucun pays attribué</h4></td>
+				<td colspan="6"><h4 class="letter"  style="margin-top: -15px">Aucun pays attribué</h4></td>
 			</tr>
 			{{--*/ $marquer = 1; /*--}}
 		@endif
 
+	<!-- Tri par ville  -->
+	@elseif($tri == 'ville' )
+		@if($letter != $contact->ville_siege_clt)
+			{{--*/ $letter = $contact->ville_siege_clt; $marquer = 0; $idletter = substr($letter,0,1); /*--}}
+			
+			@endif
+			
+		@endif
+		@if($letter == $contact->ville_siege_clt &&  $marquer == 0)
+			<tr class="active">
+				<td colspan="6"><h4 class="letter" id="{{ $idletter }}" >{!! $letter !!}</h4></td>
+			</tr>
+			{{--*/ $marquer = 1; /*--}}
+		@if($letter == null)
+			<tr class="active">
+				<td colspan="6"><h4 class="letter" style="margin-top: -15px" >Aucune ville attribuée</h4></td>
+			</tr>
+			{{--*/ $marquer = 1; /*--}}
+		@endif
+		<!-- Tri par société  -->
+		@elseif($tri == 'societe' )
+			@if($letter != $contact->nom_clt)
+				{{--*/ $letter = $contact->nom_clt; $marquer = 0; $idletter = substr($letter,0,1); /*--}}
+				
+				@endif
+				
+			@endif
+			@if($letter == $contact->nom_clt &&  $marquer == 0)
+				<tr class="active">
+					<td colspan="6">
+						<h4 class="letter" id="{{ $idletter }}" >
+							<a href="{{route('societe.show',[$contact->id])}}">{!! $letter !!}</a>
+						</h4>
+					</td>
+				</tr>
+				{{--*/ $marquer = 1; /*--}}
+			@if($letter == null)
+				<tr class="active">
+					<td colspan="6"><h4 class="letter" style="margin-top: -15px" >Aucune societé attribuée</h4></td>
+				</tr>
+				{{--*/ $marquer = 1; /*--}}
+			@endif
 	<!-- Tri par prospect client -->
 	@elseif($tri == 'client')
 		
 		@if($contact->statut==0 && $none == 0 )
 			<tr class="active">
-				<td colspan="3"><h4 class="letter" >{{ 'Prospect' }}</h4></td>
+				<td colspan="6"><h4 class="letter" >{{ 'Prospect' }}</h4></td>
 			</tr>
 			{{--*/ $none = 1; /*--}}
 		@elseif($contact->statut==1 && $clt==0)
 			<tr class="active">
-				<td colspan="3"><h4 class="letter">{{ 'Client' }}</h4></td>
+				<td colspan="6"><h4 class="letter">{{ 'Client' }}</h4></td>
 			</tr>
 			{{--*/ $clt = 1; /*--}}
 		@elseif($contact->statut==2 && $pr==0)
 			<tr class="active">
-				<td  colspan="3"><h4 class="letter">{{ 'Prospect refusé' }}</h4></td>
+				<td  colspan="6"><h4 class="letter">{{ 'Prospect refusé' }}</h4></td>
 			</tr>
 			{{--*/ $pr = 1; /*--}}
 		@endif
@@ -107,20 +162,15 @@
 <!-- Fin condition de tri -->
 			<tr style="border-bottom: 1px solid #ddd"> 
 				<td vertical-align="middle">{!! Form::checkbox('c'.$c, $contact->id, null, ['class' => 'listcheckbox checkbox']) !!}</td>
+			  	<td> <a href="{{route('contact.show',[$contact->id])}}"><p class="media-heading">{{ $contact->nom_contact.' '.$contact->prenoms_contact }}</p></a></td>
+			  	<td><p>@if(isset($contact->societe))<a href="{{ route('societe.show',[$contact->societe->id]) }}">{{ $contact->societe->nom_clt }}</a> @else {{ $contact->nom_clt }}@endif</p></td>
+			  	<td>@if($contact->fonction_contact)<p>{{ $contact->fonction_contact }} </p> @endif</td>
+			  	<td>@if($contact->tel_contact)<p>Tél : {{$contact->tel_contact}}</p>@endif</td>
 			  	<td>
-			  		<div class=" info-preview pull-left">
-			  		    <a href="{{route('contact.show',[$contact->id])}}"><p class="media-heading">{{ $contact->nom_contact.' '.$contact->prenoms_contact }}</p></a>
-			  		   <p>@if(isset($contact->societe))<a href="{{ route('societe.show',[$contact->societe->id]) }}">{{ $contact->societe->nom_clt }}</a> @else {{ $contact->nom_clt }}@endif</p> 
-
-			  		   @if($contact->fonction_contact)<p>{{ $contact->fonction_contact }} </p> @endif
-			  		   
-			  		</div>
-			  		<div class="action-place">
 			  		<ul>
 				  	    <li><a href="{{ route('contact.edit',[$contact->id])}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
 				  		<li><a href="#" data-toggle="modal" data-target="#myModalListe"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
 			 		</ul> 
-			 		</div>
 			  	</td>
 			</tr>
 			<!-- Attribution des valeurs de données Nom et Id pour le modal -->

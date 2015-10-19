@@ -32,10 +32,45 @@ class ContactController extends Controller {
 	 */
 	public function index()
 	{
-		$contact = Contact::with(['societe'=> function($query){ $query->select('nom_clt','id'); }])->where('etat',1)->orderBy('nom_contact','asc')->get();
+		$contacts = new Contact;
 		$actif = 'contact';
 		$type = 1;
-		$tri = 'none';
+		if(isset($_GET['sort'])){
+			if($_GET['sort']=='pays_clt'){
+				$contact = DB::table('contacts')
+							->leftjoin('societes','contacts.societe_id','=','societes.id')
+							->orderBy('societes.pays_clt',$_GET['order'])->where('contacts.etat',1)->get();
+				$tri = 'pays';
+			}elseif($_GET['sort']=='statut'){
+				$contact = DB::table('contacts')
+							->leftjoin('societes','contacts.societe_id','=','societes.id')
+							->orderBy('societes.statut',$_GET['order'])->where('contacts.etat',1)->get();
+				$tri = 'client';
+			}elseif($_GET['sort']=='created_at'){
+				$tri = 'ajout';
+				$contact = $contacts->with('societe')->where('etat',1)->sortable()->get();
+			}elseif($_GET['sort']=='updated_at'){
+				$tri = 'modif';
+				$contact = $contacts->with('societe')->where('etat',1)->sortable()->get();
+			}elseif($_GET['sort']=='nom_contact'){
+				$tri = 'alpha';
+				$contact = $contacts->with('societe')->where('etat',1)->sortable()->get();
+			}elseif($_GET['sort']=='societe_id'){
+				$contact = DB::table('contacts')
+							->leftjoin('societes','contacts.societe_id','=','societes.id')
+							->orderBy('societes.nom_clt',$_GET['order'])->where('contacts.etat',1)->get();
+				$tri = 'societe';
+			}elseif($_GET['sort']=='ville_siege_clt'){
+				$contact = DB::table('contacts')
+							->leftjoin('societes','contacts.societe_id','=','societes.id')
+							->orderBy('societes.ville_siege_clt',$_GET['order'])->where('contacts.etat',1)->get();
+				$tri = 'ville';
+			}	
+			
+		}else{
+			$tri = 'alpha';
+			$contact = $contacts->with('societe')->where('etat',1)->orderBy('nom_contact','asc')->get();
+		}
 		return view('contact.contact', compact('actif','contact','type','tri'));
 	}
 
