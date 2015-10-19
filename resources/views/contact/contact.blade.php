@@ -191,7 +191,9 @@ jQuery(function($){
 
 	
     $( ".sorting" ).children().click(function( event ) {
-    
+    	var link = $(this).attr('href');
+    	alert(link);
+    	event.preventDefault();
     });
 
 });

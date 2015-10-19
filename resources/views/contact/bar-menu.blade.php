@@ -36,7 +36,7 @@
 		<button type="button" class="btn btn-warning btn-smenu-position" data-toggle="modal" data-target="#myModalSearch">
 		  <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Recherche
 		</button>
-
+		<!-- Masque Menu de Tri Ancienne Version
 		  <div class="btn-group ">
 			  <button type="button" class="btn btn-default btn-smenu-position dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 				Tier par <span class="caret"></span>
@@ -81,6 +81,7 @@
 			  	</li>
 			  </ul>
 		</div>
+		-->
 		<div class="btn-group ">
 			  <button type="button" class="btn btn-primary btn-smenu-position dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 				Afficher <span class="caret"></span>
