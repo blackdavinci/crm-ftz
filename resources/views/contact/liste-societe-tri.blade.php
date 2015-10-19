@@ -177,12 +177,9 @@
 
 {!! Form::close() !!}
 
+
 @if(isset($query))
-	Mode Recherche
-	{!! Form::open(['url' => route('annuaire.searchsociete'), 'method'=>'GET', 'id'=>'searchrequest']) !!}
-		{!! Form::hidden($mode,$query)!!}
-	{!! Form::close() !!}
-	<div id="searchdata" class="$query" alt="{{$mode}}"></div>
+	<div id="searchdata" class="{{$query}}" alt="{{$mode}}"></div>
 @endif
 
 <!-- Modal de recherche -->
