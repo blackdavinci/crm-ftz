@@ -12,6 +12,7 @@ use App\Groupe;
 use SearchIndex;
 use DB;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Html\FormFacade;
 
@@ -35,11 +36,31 @@ class SocieteController extends Controller {
 	public function index()
 	{
 		//
-		$societe = Societe::where('etat',1)->orderBy('nom_clt','asc')->get();
+		$societes = new Societe;
+		$societe = $societes->sortable()->where('etat',1)->get();
+
+
+		//$societe = Societe::where('etat',1)->orderBy('nom_clt','asc')->get();
 		$actif = 'contact';
 		$type = 0;
-		$tri = 'none';
-
+		if(isset($_GET['sort'])){
+			if($_GET['sort']=='pays_clt'){
+				$tri = 'pays';
+			}elseif($_GET['sort']=='statut'){
+				$tri = 'client';
+			}elseif($_GET['sort']=='created_at'){
+				$tri = 'ajout';
+			}elseif($_GET['sort']=='updated_at'){
+				$tri = 'modif';
+			}elseif($_GET['sort']=='nom_clt'){
+				$tri = 'alpha';
+			}elseif($_GET['sort']=='ville_siege_clt'){
+				$tri = 'ville';
+			}	
+		}else{
+			$tri = 'none';
+		}
+		
 		return view('contact.contact', compact('actif','societe','type','tri'));
 	}
 
@@ -310,8 +331,12 @@ class SocieteController extends Controller {
 			$type = 0;
 			
 			if($tripar=='pays'){
-				$societe = Societe::where('etat',1)->orderBy('pays_clt','asc')->get();
+				//$societe = Societe::where('etat',1)->orderBy('pays_clt','asc')->get();
+				$societes = new Societe;
+				$type = 4;
+				$societe = $societes->sortable()->where('etat',1)->get();
 				$tri = 'pays';
+				return view('contact.contact', compact('actif','societe','type','tri'));
 			}elseif($tripar=='notes'){
 
 				$note = DB::table('societes')
@@ -337,8 +362,6 @@ class SocieteController extends Controller {
 						
 				}
 				
-				
-			
 			}elseif($tripar=='groupe'){
 				$societe = DB::table('groupes')
 								->rightjoin('societes','societes.groupe_id','=','groupes.id')

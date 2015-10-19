@@ -286,7 +286,7 @@ user agent stylesheetli {
 	padding-right:12px;
 	font-size: 15px;
 }
-#statut-contact h4{
+.statut-contact h4{
 	margin-top:0;
 }
 .affichage-border{

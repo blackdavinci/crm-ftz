@@ -1,5 +1,13 @@
 @extends('default')
 
+@section('head')
+	{{--*/ $WEBROOT = dirname($_SERVER['SCRIPT_NAME']).'/' /*--}}
+
+	<!-- Datepicker  CSS -->
+    {!! HTML::style('css/bootstrap-datetimepicker.min.css') !!}
+    
+@stop
+
 @section('title','Notes')
 @section('titre-entete','Notes')
 
@@ -44,18 +52,25 @@
 	  	{{--*/ $typenote[$values]= $values /*--}}
 	  	@endforeach
 	  	{!! Form::label('type','Categorie')!!}
-	  	{!! Form::select('type',$typenote,null,['class' =>'form-control input-sm']) !!}		
+	  	{!! Form::select('type',$typenote,'Prospect',['class' =>'form-control input-sm']) !!}		
 		
-{{--*/$dest= 	array('Moi','User1','User2')/*--}}
-@foreach($dest as $cle=>$values)
-	  	{{--*/ $destina[$values]= $values /*--}}
-	  	@endforeach
+
+
 		{!! Form::label('destination','Attribué à')!!}
 		{!! Form::select('id_user_destination',$users,Auth::user()->id,['class' =>'form-control input-sm','id'=>'user']) !!}
 		
 
 		{!! Form::label('echeance','Echeance')!!}
-	  	{!! Form::input('date', 'echeance',null,['class' =>'form-control input-sm']) !!} 
+	  	<div class="form-group">
+	  	
+	  	<div>
+			<div class="input-group date form_date col-md-12" data-date="" data-date-format="yyyy-mm-dd" data-link-field="date" data-link-format="yyyy-mm-dd">
+	            <input class="form-control" type="text" name="echeance" readonly>
+	            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+				<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	        </div>
+	    </div>
+	</div>
 
 
 			{!! Form::label('designation','Description')!!}
@@ -72,12 +87,38 @@
 
 @stop
 
+@section('footer')
+
+    <!-- Datepicker Script -->
+	
+	<script src="{{ $WEBROOT }}js/bootstrap-datetimepicker.min.js"></script>
+	<script src="{{ $WEBROOT }}js/bootstrap-datetimepicker.fr.js"></script>
+
+@stop
+
 @section('script')
 
 $(document).ready(function(){
 	 $('#destinataire').select2({ placeholder: "Choisissez le destinataire de la note (contact)" });
 
 	  $('#user').select2({ placeholder: "Choisissez l\'exécuteur" });
+
+	  $('.form_date').datetimepicker({
+	          language:  'fr',
+	          weekStart: 1,
+	          todayBtn:  1,
+	  		autoclose: 1,
+	  		todayHighlight: 1,
+	  		startView: 2,
+	  		minView: 2,
+	  		forceParse: 0
+	      });
+
+	  $("#input-fr").fileinput({
+	      language: "fr",
+	      uploadUrl: "/file-upload-batch/2",
+	      allowedFileExtensions: ["jpg", "png", "gif","jpeg"]
+	  });
 	
 });
 

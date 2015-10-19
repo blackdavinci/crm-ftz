@@ -144,38 +144,27 @@
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h4 class="modal-title" id="myModalLabel">Recherche Société</h4>
 	      </div>
-	     <form class="form-horizontal" role="form" method="GET" action="{{ route('annuaire.search') }}">
+	     <form class="form-horizontal" role="form" method="GET" action="{{ action('SearchController@searchablesociete') }}">
 	     	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 		      <div class="modal-body">
 		       <div class="form-group">
 		       	<label class="col-md-4 control-label">Nom</label>
 		       	<div class="col-md-6">
-		       		<input type="text" class="form-control" name="nom" value="{{ old('nom') }}">
+		       		<input type="text" class="form-control" name="nom" id="nom">
 		       	</div>
 		       </div>
 		       <div class="form-group">
 		       	<label class="col-md-4 control-label">Téléphone</label>
 		       	<div class="col-md-6">
-		       		<input type="number" class="form-control" name="tel" value="{{ old('tel') }}">
+		       		<input type="number" class="form-control" name="tel" id="tel" >
 		       	</div>
 		       </div>
-		       <div class="form-group">
-		       	<label class="col-md-4 control-label">Pays</label>
-		       	<div class="col-md-6">
-		       		<input type="text" class="form-control" name="pays" value="{{ old('pays') }}">
-		       	</div>
-		       </div>
-		       <div class="form-group">
-		       	<label class="col-md-4 control-label">Ville</label>
-		       	<div class="col-md-6">
-		       		<input type="text" class="form-control" name="ville" value="{{ old('ville') }}">
-		       	</div>
-		       </div>
+
 		       <div class="form-group">
 		       	<label class="col-md-4 control-label">Adresse</label>
 		       	<div class="col-md-6">
-		       		<input type="text" class="form-control" name="q" value="{{ old('adresse') }}">
+		       		<input type="text" class="form-control" name="adresse" id="adresse">
 		       	</div>
 		       </div>
 

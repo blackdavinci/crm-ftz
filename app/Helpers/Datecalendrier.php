@@ -30,7 +30,7 @@ class Datecalendrier
 	}
 
 	public function getNotesPerso($year){
-	 $match = ['etat'=>'1','id_user_destination'=>Auth::user()->id];
+	 $match = ['etat'=>1,'id_user_destination'=>Auth::user()->id];
 	$notes = Note::where($match)->get();
 	return $notes;
 	}

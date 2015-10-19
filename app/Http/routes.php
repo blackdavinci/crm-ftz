@@ -226,8 +226,8 @@ Route::get('/NotesSelect',function(){
 	if(Request::ajax()){
 	
 		$time = date("Y-m-d", Request::get('time'));
-		
-		$notes = DB::table('notes')->select('id','nom','categorie','designation')->where('echeance',$time)->get();
+		$match = ['etat'=>1,'echeance'=>$time];
+		$notes = DB::table('notes')->select('id','nom','categorie','designation')->where($match)->get();
 		foreach ($notes as $note) {
 			$data['id'][] = $note->id;
 			$data['nom'][] = $note->nom;
@@ -313,7 +313,9 @@ Route::get('contact/Tri/{tripar}',['as'=>'contact.TriContact', 'uses'=>'ContactC
 
 Route::get('societe/suppression/{data}',['as'=>'societe.destroyselect','uses'=>'SocieteController@destroyselect']);
 
-Route::get('annuaire/search',['as'=>'annuaire.search','uses'=>'SearchController@searchableannuaire']);
+Route::get('annuaire/search-societe',['as'=>'annuaire.searchsociete','uses'=>'SearchController@searchablesociete']);
+
+Route::get('annuaire/search',['as'=>'annuaire.search','uses'=>'SearchController@searchableallannuaire']);
 
 Route::get('grille','SocieteController@grille');
 

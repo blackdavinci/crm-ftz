@@ -147,6 +147,7 @@ return [
 
         
         Collective\Html\HtmlServiceProvider::class,
+        Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
         'Monarobase\CountryList\CountryListServiceProvider',
         'Webpatser\Countries\CountriesServiceProvider',
         'Maatwebsite\Excel\ExcelServiceProvider',

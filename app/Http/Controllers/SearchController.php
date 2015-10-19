@@ -19,19 +19,24 @@ use App\User;
 
 class SearchController extends Controller
 {
-    public function searchableannuaire(Request $request)
+    public function searchableallannuaire(Request $request){
+
+    }
+
+    public function searchablesociete(Request $request)
     {
         
-        $query = $request->q;
-
-        if(isset($request->s_societe)){
+       
            
             $type = 0;
             $tri = 'none';
             $actif = 'contact';
+
             
             if(isset($request->nom) && !empty($request->nom)){
                 $societe = new Societe;
+                $mode = 'nom';
+                $query = $request->nom;
                 $societe->setSearchable( [
                                 'columns' => [
                                     'nom_clt' => 10,
@@ -39,18 +44,24 @@ class SearchController extends Controller
                             ]);
                 
                 $query = $request->nom;
-                $societe = $societe->search($query)->where('etat',1)->get(); 
+                $societe = $societe->search($query)->sortable()->where('etat',1)->get(); 
+
+                
             }elseif($request->pays && !empty($request->pays)){
                 $societe = new Societe;
+                $mode = 'pays';
+                $query = $request->pays;
                 $societe->setSearchable ([
                                 'columns' => [
                                     'pays_clt' => 10,
                                 ],
                             ]);
                 $query = $request->pays;
-                $societe = $societe->search($query)->where('etat',1)->get(); 
+                $societe = $societe->search($query)->sortable()->where('etat',1)->get(); 
             }elseif($request->tel && !empty($request->tel)){
                 $societe = new Societe;
+                $mode = 'tel';
+                $query = $request->tel;
                 $societe->setSearchable ([
                                 'columns' => [
                                     'tel_siege_clt' => 10,
@@ -58,43 +69,40 @@ class SearchController extends Controller
                             ]);
               
                 $query = $request->tel;
-                $societe = $societe->search($query)->where('etat',1)->get(); 
+                $societe = $societe->search($query)->sortable()->where('etat',1)->get(); 
             }elseif($request->ville && !empty($request->ville)){
                 $societe = new Societe;
+                $mode = 'ville';
+                $query = $request->ville;
                 $societe->setSearchable ([
                                 'columns' => [
                                     'ville_siege_clt' => 10,
                                 ],
                             ]);
                 $query = $request->ville;
-                $societe = $societe->search($query)->where('etat',1)->get(); 
+                $societe = $societe->search($query)->sortable()->where('etat',1)->get(); 
             }elseif($request->adresse && !empty($request->adresse)){
                 $societe = new Societe;
+                $query = 'adresse';
+                $mode = $request->adresse;
                 $societe->setSearchable ([
                                 'columns' => [
                                     'adresse_siege_clt' => 30,
                                 ],
                             ]);
                 $query = $request->adresse;
-                $societe = $societe->search($query)->where('etat',1)->get(); 
+                $societe = $societe->search($query)->sortable()->where('etat',1)->get(); 
             }
             
 
-            return view('contact.contact', compact('actif','societe','type','tri','query'));
+            return view('contact.contact', compact('actif','societe','type','tri','query','mode'));
+    }
 
-          
-        }else{
-            
-            $type = 1;
+    public function searchablecontact(Request $request){
+    	$type = 1;
             $tri = 'none';
             $actif = 'contact';
             $contact =  Contact::search($query)->where('etat',1)->get();
-
-            if(isset($request->s_societe)){
-               
-                $type = 0;
-                $tri = 'none';
-                $actif = 'contact';
                 
                 if(isset($request->nom) && !empty($request->nom)){
                     $contact = new Contact;
@@ -128,8 +136,6 @@ class SearchController extends Controller
                     $contact = $contact->search($query)->where('etat',1)->get();  
                 }
             return view('contact.contact', compact('actif','contact','type','tri','query'));
-        }
-           
-      
     }
+
 }

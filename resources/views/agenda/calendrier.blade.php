@@ -91,26 +91,26 @@
                                 @if(strtotime($note->echeance) == $time)
                                   {{--*/ $c++ /*--}}
                                   @if($note->categorie == 'A faire')
-                                    <a href="#ret" id="event{{$note->id}}" class="evt notif  label-info   pull-left" >
+                                    <a href="#ret" id="event{{$note->id}}" class="evt notif  label-info  pull-left faire" >
                                      <div id="inf"></div>
                                     </a>
                                   @elseif($note->categorie == 'Appel téléphonique')
-                                    <a href="#ret" id="event{{$note->id}}" class="evt notif label-primary pull-left" >
+                                    <a href="#ret" id="event{{$note->id}}" class="evt notif label-primary pull-left appel" >
                                      <div id="inf"></div>
 
                                     </a>
                                   @elseif($note->categorie == 'E-mail')
-                                    <a href="#ret" id="event{{$note->id}}" class="evt notif label-warning pull-left" >
+                                    <a href="#ret" id="event{{$note->id}}" class="evt notif label-warning pull-left email" >
                                      <div id="inf"></div>
                                      
                                     </a>
                                   @elseif($note->categorie == 'Réunion')
-                                    <a href="#ret" id="event{{$note->id}}" class="evt notif label-success pull-left" >
+                                    <a href="#ret" id="event{{$note->id}}" class="evt notif label-success pull-left reunion" >
                                      <div id="inf"></div>
                                    
                                     </a>
                                   @elseif($note->categorie == 'Autre')
-                                    <a href="#ret" id="event{{$note->id}}" class="evt notif label-default pull-left" >
+                                    <a href="#ret" id="event{{$note->id}}" class="evt notif label-default pull-left autre" >
                                      <div id="inf"></div>
                                      
                                     </a>
@@ -181,27 +181,27 @@
               
               <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="faire" value="A faire"> A faire
+                    <input type="checkbox" name="faire" value="A faire" id="faire"> A faire
                   </label>
               </div>
               <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="appel" value="Appel téléphonique"> Appel téléphonique
+                    <input type="checkbox" name="appel" value="Appel téléphonique" id="appel"> Appel téléphonique
                   </label>
               </div>
               <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="autre" value="Autre"> Autre
+                    <input type="checkbox" name="autre" value="Autre" id="autre"> Autre
                   </label>
               </div>
               <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="email" value="E-mail"> E-mail
+                    <input type="checkbox" name="email" value="E-mail" id="email"> E-mail
                   </label>
               </div>
               <div class="checkbox">
                   <label>
-                    <input type="checkbox" name="reunion" value="Réunion"> Réunion
+                    <input type="checkbox" name="reunion" value="Réunion" id="reunion"> Réunion
                   </label>
               </div>
 
@@ -259,11 +259,7 @@
     <div class="row">
       <div class="col-md-12" style="margin-left:10px;">
       <h4>
-          <span class="label label-info">A faire</span>
-          <span class="label label-primary">Appel téléphonique</span>
-          <span class="label label-default">Autre</span>
-          <span class="label label-warning">E-mail</span>
-          <span class="label label-success">Réunion</span>
+          
       </h4>
 
       </div>
@@ -283,6 +279,7 @@
 
  jQuery(function($){
  
+ <!-- Script Affichage du calendrier -->
   var maintenant = new Date();
   var mois = maintenant.getMonth();
   
@@ -304,11 +301,30 @@
     return false;
    });
 
+<!-- Script Afficahge des données d'étiquette d'une date  -->
   $('.show-line').click(function(e){
     e.preventDefault();
    var time = $(this).attr('id');
    var ligne_num = $(this).attr('datasrc');
    var ligne = 'content'+ligne_num;
+   var reunion, appel, faire, email, autre = 1;
+
+
+   if($('.reunion').hasClass('hide')){
+     reunion = 0;
+   }
+   if($('.appel').hasClass('hide')){
+     appel = 0;
+   }
+   if($('.faire').hasClass('hide')){
+     faire = 0;
+   }
+   if($('.autre').hasClass('hide')){
+     autre = 0;
+   }
+   if($('.email').hasClass('hide')){
+     email = 0;
+   }
    
    $.getJSON('NotesSelect', { time : time }, function(data) {
       console.log(data);
@@ -316,25 +332,266 @@
         $.each(data.nom,function(key, value) {
           if(data.categorie[key]=='A faire'){
             var v = 12;
-            $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-info">'+value+'</span></a> '+data.designation[key]+' <br/> ');
+            if(faire !=0){
+              $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-info">A faire</span></a> '+value+' : '+data.designation[key]+' <br/> ');
+            }
           }
           if(data.categorie[key]=='Appel téléphonique'){
-             $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-primary">'+value+'</span></a> '+data.designation[key]+' <br/> ');
+            if(appel != 0){
+             $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-primary">Appel téléphonique</span></a> '+value+' : '+data.designation[key]+' <br/> ');
+            }
           }
           if(data.categorie[key]=='Réunion'){
-             $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-success">'+value+'</span></a> '+data.designation[key]+' <br/> ');
+            if(reunion != 0){
+             $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-success">Réunion</span></a> '+value+' : '+data.designation[key]+' <br/> ');
+            }
           }
           if(data.categorie[key]=='E-mail'){
-             $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-warning">'+value+'</span></a> '+data.designation[key]+' <br/> ');
+            if(email !=0){
+             $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-warning">E-mail</span></a> '+value+' : '+data.designation[key]+' <br/> ');
+            }
           }
           if(data.categorie[key]=='Autre'){
-             $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-default">'+value+'</span></a> '+data.designation[key]+' <br/> ');
+            if(autre !=0){
+             $('.'+ligne).append('<a href="'+data.id[key]+'/afficher-note/1"><span class="label label-default">Autre</span></a> '+value+' : '+data.designation[key]+' <br/> ');
+            }
           }
         });
 
    });
 
   });
+
+  <!-- Action sur choix du type d'étiquette a afficher -->
+  
+
+  if($('#autre').prop('checked') == false && $('#faire').prop('checked') == false && $('#appel').prop('checked') == false && $('#reunion').prop('checked') == false && $('#email').prop('checked') == false){
+    $('.appel').removeClass('hide');
+    $('.autre').removeClass('hide');
+    $('.faire').removeClass('hide');
+    $('.reunion').removeClass('hide');
+    $('.email').removeClass('hide');
+    
+  }
+
+     $('#faire').click(function(event) {  //on click 
+            if(this.checked) { // check select status
+              $('.faire').removeClass('hide');
+
+              if($('#reunion').prop('checked') == false){
+                $('.reunion').addClass('hide');
+              }
+              if($('#appel').prop('checked') == false){
+                $('.appel').addClass('hide');
+              }
+              if($('#autre').prop('checked') == false){
+                $('.autre').addClass('hide');
+              }
+              if($('#email').prop('checked') == false){
+                $('.email').addClass('hide');
+              }
+            }else{
+              if($('#autre').prop('checked') == false && $('#faire').prop('checked') == false && $('#appel').prop('checked') == false && $('#reunion').prop('checked') == false && $('#email').prop('checked') == false){
+                $('.appel').removeClass('hide');
+                $('.autre').removeClass('hide');
+                $('.faire').removeClass('hide');
+                $('.reunion').removeClass('hide');
+                $('.email').removeClass('hide');
+                
+              }
+              if($('#reunion').is( ':checked') || $('#appel').is( ':checked') || $('#autre').is( ':checked') || $('#email').is( ':checked')){
+                $('.faire').addClass('hide');
+              }
+
+              if($('.appel').prop(hasClass('hide'))==false){
+                $('.appel').removeClass('hide');
+              }
+              if($('.reunion').prop(hasClass('hide'))==false){
+                $('.reunion').removeClass('hide');
+              }
+              if($('.autre').prop(hasClass('hide'))==false){
+                $('.autre').removeClass('hide');
+              }
+              if($('.email').prop(hasClass('hide'))==false){
+                $('.email').removeClass('hide');
+              }
+                 
+            }
+        });
+
+   $('#appel').click(function(event) {  //on click 
+            if(this.checked) { // check select status
+              $('.appel').removeClass('hide');
+
+              if($('#reunion').prop('checked') == false){
+                $('.reunion').addClass('hide');
+              }
+              if($('#faire').prop('checked') == false){
+                $('.faire').addClass('hide');
+              }
+              if($('#autre').prop('checked') == false){
+                $('.autre').addClass('hide');
+              }
+              if($('#email').prop('checked') == false){
+                $('.email').addClass('hide');
+              }
+            }else{
+              if($('#autre').prop('checked') == false && $('#faire').prop('checked') == false && $('#appel').prop('checked') == false && $('#reunion').prop('checked') == false && $('#email').prop('checked') == false){
+                $('.appel').removeClass('hide');
+                $('.autre').removeClass('hide');
+                $('.faire').removeClass('hide');
+                $('.reunion').removeClass('hide');
+                $('.email').removeClass('hide');
+                
+              }
+              if($('#reunion').is( ':checked') || $('#faire').is( ':checked') || $('#autre').is( ':checked') || $('#email').is( ':checked')){
+                $('.appel').addClass('hide');
+              }
+
+              if($('.faire').prop(hasClass('hide'))==false){
+                $('.faire').removeClass('hide');
+              }
+              if($('.reunion').prop(hasClass('hide'))==false){
+                $('.reunion').removeClass('hide');
+              }
+              if($('.autre').prop(hasClass('hide'))==false){
+                $('.autre').removeClass('hide');
+              }
+              if($('.email').prop(hasClass('hide'))==false){
+                $('.email').removeClass('hide');
+              }
+                 
+            }
+        });
+
+     $('#autre').click(function(event) {  //on click 
+            if(this.checked) { // check select status
+              $('.autre').removeClass('hide');
+
+              if($('#reunion').prop('checked') == false){
+                $('.reunion').addClass('hide');
+              }
+              if($('#faire').prop('checked') == false){
+                $('.faire').addClass('hide');
+              }
+              if($('#appel').prop('checked') == false){
+                $('.appel').addClass('hide');
+              }
+              if($('#email').prop('checked') == false){
+                $('.email').addClass('hide');
+              }
+            }else{
+              if($('#autre').prop('checked') == false && $('#faire').prop('checked') == false && $('#appel').prop('checked') == false && $('#reunion').prop('checked') == false && $('#email').prop('checked') == false){
+                $('.appel').removeClass('hide');
+                $('.autre').removeClass('hide');
+                $('.faire').removeClass('hide');
+                $('.reunion').removeClass('hide');
+                $('.email').removeClass('hide');
+                
+              }
+              if($('#reunion').is( ':checked') || $('#faire').is( ':checked') || $('#appel').is( ':checked') || $('#email').is( ':checked')){
+                $('.autre').addClass('hide');
+              }
+
+              if($('.faire').prop(hasClass('hide'))==false){
+                $('.faire').removeClass('hide');
+              }
+              if($('.reunion').prop(hasClass('hide'))==false){
+                $('.reunion').removeClass('hide');
+              }
+              if($('.appel').prop(hasClass('hide'))==false){
+                $('.appel').removeClass('hide');
+              }
+              if($('.email').prop(hasClass('hide'))==false){
+                $('.email').removeClass('hide');
+              }
+                 
+            }
+        });
+
+  $('#reunion').click(function(event) {  //on click 
+            if(this.checked) { // check select status
+              $('.reunion').removeClass('hide');
+
+              if($('#autre').prop('checked') == false){
+                $('.autre').addClass('hide');
+              }
+              if($('#faire').prop('checked') == false){
+                $('.faire').addClass('hide');
+              }
+              if($('#appel').prop('checked') == false){
+                $('.appel').addClass('hide');
+              }
+              if($('#email').prop('checked') == false){
+                $('.email').addClass('hide');
+              }
+            }else{
+
+            if($('#autre').prop('checked') == false && $('#faire').prop('checked') == false && $('#appel').prop('checked') == false && $('#reunion').prop('checked') == false && $('#email').prop('checked') == false){
+              $('.appel').removeClass('hide');
+              $('.autre').removeClass('hide');
+              $('.faire').removeClass('hide');
+              $('.reunion').removeClass('hide');
+              $('.email').removeClass('hide');
+              
+            }
+              if($('#autre').is( ':checked') || $('#faire').is( ':checked') || $('#appel').is( ':checked') || $('#email').is( ':checked')){
+                $('.reunion').addClass('hide');
+              }
+
+              if($('.faire').prop(hasClass('hide'))==false){
+                $('.faire').removeClass('hide');
+              }
+              if($('.autre').prop(hasClass('hide'))==false){
+                $('.autre').removeClass('hide');
+              }
+              if($('.appel').prop(hasClass('hide'))==false){
+                $('.appel').removeClass('hide');
+              }
+              if($('.email').prop(hasClass('hide'))==false){
+                $('.email').removeClass('hide');
+              }
+                 
+            }
+        });
+
+   $('#email').click(function(event) {  //on click 
+            if(this.checked) { // check select status
+              $('.email').removeClass('hide');
+
+              if($('#autre').prop('checked') == false){
+                $('.autre').addClass('hide');
+              }
+              if($('#faire').prop('checked') == false){
+                $('.faire').addClass('hide');
+              }
+              if($('#appel').prop('checked') == false){
+                $('.appel').addClass('hide');
+              }
+              if($('#reunion').prop('checked') == false){
+                $('.reunion').addClass('hide');
+              }
+            }else{
+              
+              if($('#autre').is( ':checked') || $('#faire').is( ':checked') || $('#appel').is( ':checked') || $('#reunion').is( ':checked')){
+                $('.email').addClass('hide');
+              }
+
+              if($('.faire').prop(hasClass('hide'))==false){
+                $('.faire').removeClass('hide');
+              }
+              if($('.autre').prop(hasClass('hide'))==false){
+                $('.autre').removeClass('hide');
+              }
+              if($('.appel').prop(hasClass('hide'))==false){
+                $('.appel').removeClass('hide');
+              }
+              if($('.reunion').prop(hasClass('hide'))==false){
+                $('.reunion').removeClass('hide');
+              }
+                 
+            }
+        });
   
   
  });

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Kyslik\ColumnSortable\Sortable;
 
 class Contact extends Model {
 

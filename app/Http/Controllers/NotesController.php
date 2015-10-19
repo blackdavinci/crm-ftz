@@ -161,8 +161,24 @@ class NotesController extends Controller {
 	public function edit($id)
 	{
 		$actif ='notes';
+		$contacts[''] = '';
+		$user = User::select('id','name','prenom')->where('etat',1)->get();
+		$contact = Contact::select('id','nom_contact','prenoms_contact')->where('etat',1)->get();
+
+		// Remplissage du tableau des contacts 
+		foreach ($contact as $key => $value) {
+			$contacts[$value->id] = $value->nom_contact.' '.$value->prenoms_contact;
+		}
+
+		// Remplissage du tableau des utilisateurs 
+		foreach ($user as $key => $value) {
+			$users[$value->id] = $value->name.' '.$value->prenom;
+		}
+		$users[Auth::user()->id] = 'Moi';
+		
 		$note= Note::FindOrFail($id);
-		return view('notes.edit',compact('note','actif'));
+
+		return view('notes.edit',compact('note','actif','users','contacts'));
 
 	}
 
@@ -170,8 +186,22 @@ class NotesController extends Controller {
 	public function modifierNote($id,$back)
 	{
 		$actif ='notes';
+		$contacts[''] = '';
+		$user = User::select('id','name','prenom')->where('etat',1)->get();
+		$contact = Contact::select('id','nom_contact','prenoms_contact')->where('etat',1)->get();
+
+		// Remplissage du tableau des contacts 
+		foreach ($contact as $key => $value) {
+			$contacts[$value->id] = $value->nom_contact.' '.$value->prenoms_contact;
+		}
+
+		// Remplissage du tableau des utilisateurs 
+		foreach ($user as $key => $value) {
+			$users[$value->id] = $value->name.' '.$value->prenom;
+		}
+		$users[Auth::user()->id] = 'Moi';
 		$note= Note::FindOrFail($id);
-		return view('notes.edit',compact('note','actif','back'));
+		return view('notes.edit',compact('note','actif','back','contacts','users'));
 
 	}
 

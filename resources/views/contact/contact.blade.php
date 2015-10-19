@@ -66,13 +66,15 @@
 	</div>
 		
 	@if($type==0)
-		@include('contact.liste-societe')
+		@include('contact.liste-societe-tri')
 	@elseif($type==1)
 		@include('contact.liste-contact')
 	@elseif($type==2)
 		@include('contact.group-crm')
 	@elseif($type==3)
 		@include('contact.list-societe-crm')
+	@elseif($type==4)
+		@include('contact.liste-societe-tri')
 	@endif
 </div>
 	<div class="col-md-3 content-sidebar" >
@@ -150,6 +152,47 @@ jQuery(function($){
 
         }
     }); 
+
+    $('#nom').click(function(){
+    	$(this).prop('readonly',false);
+    	$('#tel').prop('readonly', true);
+    	$('#ville').prop('readonly', true);
+    	$('#pays').prop('readonly', true);
+    	$('#adresse').prop('readonly', true);
+    });
+     $('#pays').click(function(){
+    	$(this).prop('readonly',false);
+    	$('#nom').prop('readonly', true);
+    	$('#ville').prop('readonly', true);
+    	$('#tel').prop('readonly', true);
+    	$('#adresse').prop('readonly', true);
+    });
+     $('#ville').click(function(){
+    	$(this).prop('readonly',false);
+    	$('#tel').prop('readonly', true);
+    	$('#nom').prop('readonly', true);
+    	$('#pays').prop('readonly', true);
+    	$('#adresse').prop('readonly', true);
+    });
+     $('#adresse').click(function(){
+    	$(this).prop('readonly',false);
+    	$('#tel').prop('readonly', true);
+    	$('#ville').prop('readonly', true);
+    	$('#pays').prop('readonly', true);
+    	$('#nom').prop('readonly', true);
+    });
+    $('#tel').click(function(){
+    	$(this).prop('readonly',false);
+    	$('#nom').prop('readonly', true);
+    	$('#ville').prop('readonly', true);
+    	$('#pays').prop('readonly', true);
+    	$('#adresse').prop('readonly', true);
+    });
+
+	
+    $( ".sorting" ).children().click(function( event ) {
+    
+    });
 
 });
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Kyslik\ColumnSortable\Sortable;
 
 
 
@@ -9,11 +10,19 @@ class Societe extends Model {
 
 	//
 
-	use SearchableTrait;
+	use SearchableTrait, Sortable;
 
 	protected $guarded = ['timestamps'];
 
 	protected $searchable;
+
+	 protected $sortable = [
+                           'nom_clt',
+                           'pays_clt',
+                           'ville_siege_clt',
+                           'statut', 
+                           'created_at', 
+                           'updated_at']; 
 
 	public function setSearchable($value)
 	{
