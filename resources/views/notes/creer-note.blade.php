@@ -39,20 +39,15 @@
 		{!! Form::label('nom','Titre de la note')!!}
 	  	{!! Form::text('nom',null,['class' =>'form-control', 'placeholder'=>'Titre de la note']) !!}
 
+{{--*/ $cat = ['A faire'=>'A faire', 'Appel téléphonique'=>'Appel téléphonique', 'E-mail'=>'E-mail','Réunion'=>'Réunion','Autre'=>'Autre']/*--}}
 
-<?php  $categ= 	array('A faire','Appel téléphonique','E-mail','Réunion','Autre');?>
-@foreach($categ as $cle=>$values)
-	  	{{--*/ $cat[$values]= $values /*--}}
-	  	@endforeach
 	  	{!! Form::label('categorie','Etiquette')!!}
-	  	{!! Form::select('categorie',$cat,null,['class' =>'form-control input-sm' ]) !!}
+	  	{!! Form::select('categorie',$cat,'A faire',['class' =>'form-control input-sm' ]) !!}
 		
-{{--*/$typen= 	array('Prospect','Client','Prospect à revoir','Refus')/*--}}
-@foreach($typen as $cle=>$values)
-	  	{{--*/ $typenote[$values]= $values /*--}}
-	  	@endforeach
-	  	{!! Form::label('type','Categorie')!!}
-	  	{!! Form::select('type',$typenote,'Prospect',['class' =>'form-control input-sm']) !!}		
+	{{--*/$typenote = ['Client'=>'Client','Prospect'=>'Prospect','Prospect à revoir'=>'Prospect à revoir','Refus'=>'Refus'] /*--}}
+
+	{!! Form::label('type','Categorie')!!}
+	{!! Form::select('type',$typenote,'Prospect',['class' =>'form-control input-sm']) !!}		
 		
 
 

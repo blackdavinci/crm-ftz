@@ -315,6 +315,7 @@ class SocieteController extends Controller {
 	public function destroy($id)
 	{
 		//
+		
 		$contacts = Societe::findOrFail($id)->contacts()->select('id')->where('etat',1)->get();
 		if(!empty($contacts->id)){
 			foreach ($contacts as $value) {

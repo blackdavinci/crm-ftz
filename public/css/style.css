@@ -286,8 +286,8 @@ user agent stylesheetli {
 	padding-right:12px;
 	font-size: 15px;
 }
-.statut-contact h4{
-	margin-top:0;
+.statut-contact {
+	padding-top:0;
 }
 .affichage-border{
 	border-right: 1px solid #ddd;
@@ -295,7 +295,7 @@ user agent stylesheetli {
 .table-noborder-top>tbody>tr>th,.table-noborder-top>tbody>tr>td {
 	border-top: 0;
 	padding-bottom: 0;
-	padding-right: 20px;
+
 }
 .trait-box{
 	height:100%;
@@ -309,21 +309,25 @@ user agent stylesheetli {
 	font-weight: bold;
 }
 .table-contact td ul {
-	float:right;
+	padding:0px;
 	display:none;
 }
-
+.statut-type {
+	padding-left:8px;
+	padding-right:8px;
+}
+.action-list li{
+	float:right;
+	list-style: none;
+}
 .action-note{
 	margin-bottom: 0px;
 }
 
-.table-contact td:hover ul  {
+.table-contact tr:hover ul  {
 	display:block;
 }
-.table-contact td ul li{
-	margin:0;
-	list-style: none;
-}
+
 
 td
 .table-contact p{

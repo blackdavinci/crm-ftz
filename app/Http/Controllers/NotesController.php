@@ -26,9 +26,9 @@ class NotesController extends Controller {
 	public function index()
 	{
 
-		$note_auj= Note::where('etat','1')->where('echeance','=',Carbon::today())->orderBy('updated_at', 'desc')->paginate(15);
-		$note_futur= Note::where('etat','1')->where('echeance','>',Carbon::today())->orderBy('updated_at', 'desc')->paginate(15);
-		$note_past= Note::where('etat','1')->where('echeance','<',Carbon::today())->orderBy('updated_at', 'desc')->paginate(15);
+		$note_auj= Note::where('etat','1')->where('echeance','=',Carbon::today())->orderBy('updated_at', 'desc')->get();
+		$note_futur= Note::where('etat','1')->where('echeance','>',Carbon::today())->orderBy('updated_at', 'desc')->get();
+		$note_past= Note::where('etat','1')->where('echeance','<',Carbon::today())->orderBy('updated_at', 'desc')->get();
 
 		/*$notes= Note::orderBy('updated_at', 'desc')->get();*/
 		$actif ='notes';
@@ -117,9 +117,14 @@ class NotesController extends Controller {
 	{
 		$actif ='contact';
 		$note = Note::create($request->all()); 
-		$id = $request->contact_id;
 
-		return  redirect(route('contact.show', $id));
+		if(isset($request->contact_id_create)){
+			$id = $request->contact_id_create;
+			return  redirect(route('contact.show', $id));
+		}else{
+			return view('notes.aff_note',compact('note','actif'));
+		}
+		
 		/*return redirect(route('notes.index'));
 			return view('notes.create',compact('actif','note'));*/
 	}

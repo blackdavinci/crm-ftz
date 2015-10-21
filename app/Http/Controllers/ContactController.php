@@ -65,14 +65,17 @@ class ContactController extends Controller {
 							->leftjoin('societes','contacts.societe_id','=','societes.id')
 							->orderBy('societes.ville_siege_clt',$_GET['order'])->where('contacts.etat',1)->get();
 				$tri = 'ville';
-			}	
+			}elseif($_GET['sort']=='notes'){
+				$contact = $contacts->with('notes')->where('etat',1)->orderBy('nom_contact',$_GET['sort'])->get();
+				$tri = 'notes';
+			}
 			
 		}else{
 			$tri = 'alpha';
 			$contact = $contacts->with('societe')->where('etat',1)->orderBy('nom_contact','asc')->get();
 		}
 		return view('contact.contact', compact('actif','contact','type','tri'));
-	}
+}
 
 	/**
 	 * Show the form for creating a new resource.
@@ -180,18 +183,24 @@ class ContactController extends Controller {
 	public function destroy($id)
 	{
 		//
+		$retour = substr($id,0,1);
+		$id = substr($id,1);
+		
 		$contact = Contact::findOrFail($id);
 		$contact->update(['etat'=>0]);
 
-		
-
 		$id = $contact->societe_id;
-		
-		if($id != 0){
-			return  redirect(route('societe.show',$id));
+
+		if($retour !='l'){
+			if($id != 0){
+				return  redirect(route('societe.show',$id));
+			}else{
+				return redirect(route('contact.index'));
+			}
 		}else{
 			return redirect(route('contact.index'));
-		}
+		}	
+		
 	}
 
 	/**

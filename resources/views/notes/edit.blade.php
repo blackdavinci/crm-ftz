@@ -39,16 +39,13 @@
 
 
 <?php  $categ= 	array('A faire','Appel téléphonique','E-mail','Réunion','Autre');?>
-@foreach($categ as $cle=>$values)
-	  	{{--*/ $cat[$values]= $values /*--}}
-	  	@endforeach
+{{--*/ $cat = ['A faire'=>'A faire', 'Appel téléphonique'=>'Appel téléphonique', 'E-mail'=>'E-mail','Réunion'=>'Réunion','Autre'=>'Autre']/*--}}
+
 	  	{!! Form::label('categorie','Etiquette')!!}
-	  	{!! Form::select('categorie',$cat,[$note->categorie],['class' =>'form-control input-sm']) !!}
+	  	{!! Form::select('categorie',$cat,'A faire',['class' =>'form-control input-sm']) !!}
 		
-{{--*/$typen= 	array('Prospect','Client','Prospect à revoir','Refus')/*--}}
-@foreach($typen as $cle=>$values)
-	  	{{--*/ $typenote[$values]= $values /*--}}
-	  	@endforeach
+{{--*/$typenote = ['Client'=>'Client','Prospect'=>'Prospect','Prospect à revoir'=>'Prospect à revoir','Refus'=>'Refus'] /*--}}
+
 	  	{!! Form::label('type','Categorie')!!}
 	  	{!! Form::select('type',$typenote,[$note->type],['class' =>'form-control input-sm']) !!}		
 		

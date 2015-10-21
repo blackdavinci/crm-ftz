@@ -315,6 +315,8 @@ Route::get('societe/suppression/{data}',['as'=>'societe.destroyselect','uses'=>'
 
 Route::get('annuaire/search-societe',['as'=>'annuaire.searchsociete','uses'=>'SearchController@searchablesociete']);
 
+Route::get('annuaire/search-contact',['as'=>'annuaire.searchsociete','uses'=>'SearchController@searchablecontact']);
+
 Route::get('annuaire/search',['as'=>'annuaire.search','uses'=>'SearchController@searchableallannuaire']);
 
 Route::get('grille','SocieteController@grille');

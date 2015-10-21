@@ -21,6 +21,38 @@ class SearchController extends Controller
 {
     public function searchableallannuaire(Request $request){
 
+    	$query = $request->q;
+        $societe = new Societe;
+        $contact = new Contact;
+        $mode = 'all';
+        $tri = 'no-tri';
+        $societe->setSearchable( [
+                                'columns' => [
+                                    'nom_clt' => 10,
+                                    'pays_clt' => 10,
+                                    'ville_siege_clt' => 10,
+                                    'tel_siege_clt' => 10,
+                                    'adresse_siege_clt'=>10,
+                                ],
+                            ]);
+        $contact->setSearchable( [
+                                'columns' => [
+                                    'nom_contact' => 10,
+                                    'prenoms_contact' => 10,
+                                    'tel_contact' => 10,
+                                    'adresse_contact' => 10,
+                                ],
+                            ]);
+
+
+    	$societe = $societe->search($query)->where('etat',1)->orderBy('nom_clt','asc')->get();
+    	$contact = $contact->search($query)->where('etat',1)->orderBy('nom_contact','asc')->get();
+    	$type = 4;
+    	$tri = 'none';
+    	$actif = 'contact';
+
+    	return view('contact.contact', compact('actif','societe','contact','type','tri','query','mode'));
+
     }
 
     public function searchablesociete(Request $request)
@@ -259,6 +291,9 @@ class SearchController extends Controller
             return view('contact.contact', compact('actif','societe','type','tri','query','mode'));
     }
 
+
+    /****************************************** Recherche sur les contacts ***********************************************/
+
     public function searchablecontact(Request $request){
     	$type = 1;
             $tri = 'none';
@@ -275,7 +310,9 @@ class SearchController extends Controller
                                 ]);
                     
                     $query = $request->nom;
-                    $contact = $contact->search($query)->where('etat',1)->get();  
+                    $mode = 'nom';
+                    $tri ='none';
+                    $contact = $contact->search($query)->where('etat',1)->orderBy('nom_contact','asc')->get();  
                 }elseif($request->tel && !empty($request->tel)){
                     $contact->setSearchable ([
                                     'columns' => [
@@ -284,7 +321,9 @@ class SearchController extends Controller
                                 ]);
                   
                     $query = $request->tel;
-                    $contact = $contact->search($query)->where('etat',1)->get();  
+                    $mode = 'tel';
+                     $tri ='none';
+                    $contact = $contact->search($query)->where('etat',1)->orderBy('nom_contact','asc')->get();  
                 }elseif($request->adresse && !empty($request->adresse)){
                     $contact->setSearchable ([
                                     'columns' => [
@@ -292,9 +331,117 @@ class SearchController extends Controller
                                     ],
                                 ]);
                     $query = $request->adresse;
-                    $contact = $contact->search($query)->where('etat',1)->get();  
+                    $mode = 'adresse';
+                    $tri ='none';
+                    $contact = $contact->search($query)->where('etat',1)->orderBy('nom_contact','asc')->get();  
                 }
-            return view('contact.contact', compact('actif','contact','type','tri','query'));
+
+
+                // Tri des résultats de la recherche contact
+
+                if(isset($_GET['sort'])){
+
+                	$query = $_GET['query'];
+
+                	// Tri sur recherche par nom 
+                	if($_GET['mode']=='nom'){
+                		$mode = 'nom';
+                		if($_GET['sort']=='pays_clt'){
+                			$tri = 'pays';
+                			$contact->setSearchable ([
+                			                'columns' => [
+                			                    'nom_contact' => 10,
+                			                    'prenoms_contact' => 10,
+                			                ],
+                			               
+                			            ]);
+
+                			$contact = $contact->search($query)->where('etat',1)->get();
+                		
+                			foreach ($contact as $key => $value) {
+                				var_dump($value->nom_contact.' '.$value->prenoms_contact);
+                			}
+
+                			
+                			dd();
+
+                			return view('contact.contact', compact('actif','contact','type','tri','query','mode'));
+                		}elseif($_GET['sort']=='ville_siege_clt'){
+                			$tri="ville";
+                		}elseif($_GET['sort']=='statut'){
+                			$tri="client";
+                		}elseif($_GET['sort']=='nom_clt'){
+                			$tri="alpha";
+                		}elseif($_GET['sort']=='created_at'){
+                			$tri="ajout";
+                		}elseif($_GET['sort']=='updated_at'){
+                			$tri="modif";
+                		}elseif($_GET['sort']=='notes'){
+                			$note = DB::table('societes')
+                			            ->join('contacts', 'societes.id', '=', 'contacts.societe_id')
+                			            ->join('notes', 'contacts.id', '=', 'notes.contact_id')
+                			            ->select('societes.*', 'notes.*')->where('societes.etat',1)
+                			            ->get();
+                			$societe = $societe->search($query)->sortable()->where('etat',1)->get();
+                			$tri = 'notes';
+
+                			// Tri des contacts sans note
+                			foreach ($societes as $key => $value) {
+                				$exist = 0;
+                				foreach ($note as $keyn => $valuen) {
+                					if($value->nom_clt == $valuen->nom_clt){
+                						$exist = 1;
+                					}
+                				}
+
+                				if($exist==0){
+                					$societe [] = $value;
+                				}
+                					
+                			}
+                		}
+                		$contact->setSearchable ([
+                		                'columns' => [
+                		                    'nom_contact' => 10,
+                		                    'prenoms_contact' => 10,
+                		                ],
+                		            ]);
+                		$contact = $contact->search($query)->sortable()->where('etat',1)->get();
+                		
+                	}
+                	
+                	
+                	// Tri sur recherche par adresse
+                	if($_GET['mode']=='adresse'){
+                	 	$mode = 'adresse';
+                	 	if($_GET['sort']=='pays_clt'){
+                			$tri = 'pays';
+                		}elseif($_GET['sort']=='ville_siege_clt'){
+                			$tri="ville";
+                		}elseif($_GET['sort']=='statut'){
+                			$tri="client";
+                		}elseif($_GET['sort']=='nom_clt'){
+                			$tri="alpha";
+                		}elseif($_GET['sort']=='created_at'){
+                			$tri="ajout";
+                		}elseif($_GET['sort']=='updated_at'){
+                			$tri="modif";
+                		}elseif($_GET['sort']=='notes'){
+                			$tri="notes";
+                		}
+                    	$societe->setSearchable ([
+                                    'columns' => [
+                                        'adresse_siege_clt' => 10,
+                                    ],
+                                ]);
+
+                    	$contact = $contact->search($query)->sortable()->where('etat',1)->get(); 
+                		
+                	}
+
+                }
+            return view('contact.contact', compact('actif','contact','type','tri','query','mode'));
+
     }
 
 }

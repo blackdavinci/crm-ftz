@@ -12,7 +12,7 @@
 		  <a class="navbar-brand" href="#">
 			<img alt="Brand" src="{{$WEBROOT}}/img/logo.png" id="logo">
 		  </a>
-          <a class="navbar-brand" href="#" id="project-name">CRM FTZ</a>
+          <a class="navbar-brand" href="#" id="project-name">QuickGest</a>
         </div>
 
        <div class="col-lg-8 left-btn-search" style="margin-left: 9px">

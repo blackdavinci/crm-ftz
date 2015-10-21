@@ -37,16 +37,7 @@
 			
 		</div>
 
-		 <div class="btn-group ">
-		<button type="button" class="btn btn-default btn-smenu-position dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-				Type <span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu " role="menu">
-			  	<li><a href="#">Tout</a></li>
-			  	<li><a href="#">Notes attribuées</a></li>
-			  	<li><a href="#">Notes Rédigées</a></li>
-			  </ul>
-		</div>
+		 
 			<!-- a modifier et mettre la route de l'ajout d note 
 
 	    <a class="btn btn-primary btn-smenu-position" href="{{route('notes.create')}}" role="button">

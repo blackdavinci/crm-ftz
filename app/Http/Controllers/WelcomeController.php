@@ -1,5 +1,11 @@
 <?php namespace App\Http\Controllers;
 use App\Preference;
+use App\Note;
+use App\Contact;
+use App\Societe;
+use App\Devis;
+use App\Livraison;
+use App\Facture;
 
 class WelcomeController extends Controller {
 
@@ -33,8 +39,11 @@ class WelcomeController extends Controller {
 	{
 		$actif = 0; 
 		$preference = Preference::first();
-	
-		return view('accueil',compact('actif','preference'));
+		$notes = Note::where('etat',1)->orderBy('created_at','desc')->paginate(5);
+		$contacts = Contact::where('etat',1)->orderBy('created_at','desc')->paginate(5);
+		$societes = Societe::where('etat',1)->orderBy('created_at','desc')->paginate(5);
+		$devis = Devis::where('etat_devis',1)->orderBy('created_at','desc')->paginate(5);
+		return view('accueil',compact('actif','preference','notes','contacts','societes','devis'));
 	}
 	
 }

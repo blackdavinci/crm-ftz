@@ -29,7 +29,7 @@
   			<img src="{{ $WEBROOT }}/img/icon-csv.png">
   		</a>
   		<a href="#selection" data-toggle="collapse" aria-expanded="false" aria-controls="selection">
-  			<strong>Exporter les contacts vers un fichier CSV</strong>
+  			<strong>Exporter les contacts vers un fichier CSV, PDF, XLS</strong>
   		</a>
   		<p class="detail-link">L’exportation vers un fichier CSV peut être utilisée dans presque toutes les bases de données et feuilles de calcul.</p>
   		<!-- Choix des données à Exporter -->

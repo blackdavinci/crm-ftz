@@ -93,4 +93,51 @@
 
     </div>
 
+    <!-- Modal de confirmation de suppression -->
+
+  <div class="modal fade" id="myModalListe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Suppression de note</h4>
+        </div>
+        <div class="modal-body">
+          Voulez-vous vraimment supprimer la note <strong><span class="nom-remove"></span> </strong> ?
+        </div> 
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+          <div class="pull-right" style="margin-left:5px;">
+          
+            <form class="delete-form" role="form" method="POST" >
+              <input name="_method" type="hidden" value="DELETE">
+              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              {!! Form::submit('Supprimer',['class'=>'btn btn-warning btn-smenu-position'])!!}
+            {!! Form::close() !!}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+@stop
+
+@section('script')
+
+jQuery(function($){
+
+<!-- Function pour la suppression direct -->
+$('.glyphicon-remove').click(function(){
+  var id = $(this).attr('id');
+  var nom = $(this).attr('alt');
+  $('.nom-remove').html(nom);
+
+  $('.delete-form').attr('action','notes/'+id);
+  
+});
+
+
+
+});
+
 @stop

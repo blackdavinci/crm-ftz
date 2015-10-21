@@ -123,9 +123,9 @@
 
 	  		<tr > 
 	  			<td><span class="title-note">Catégorie :  </span>
-	  			<span class="info">{{$note->type}}</span></td>
+	  			<span class="info">@if(isset($note->type)) {{$note->type}} @endif</span></td>
 	  		</tr>
-
+			@if($note->contact_id !=0)
 	  		<tr > 
 	  			<td><span class="title-note">Attribué à  :  </span>
 	  				<span class="info">
@@ -134,7 +134,7 @@
 	  				</span>
 	  			</td>
 	  		</tr>
-
+			@endif
 	  		<tr > 
 	  			<td><span class="title-note">Echéance  : </span>
 					{{--*/ $date = new DateTime($note->echeance); /*--}}

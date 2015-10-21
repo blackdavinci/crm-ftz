@@ -3,15 +3,9 @@
 
 	     <div class="row">
 	     {!! Form::open(['route'=>'annuaire.search', 'method'=>'GET']) !!}
-			
-			@if(isset($type) && $type==0)
-	     		{!! Form::hidden('s_societe','societe') !!}
-	     	@else
-	     		{!! Form::hidden('s_contact','contact') !!}
-	     	@endif
 		  <div class="col-lg-4 left-btn-search">
 		      <div class="input-group" id="the-basics">
-		        <input type="text" name="q"  class="form-control" placeholder="Recherche de contact...">
+		        <input type="text" name="q"  class="form-control" value="{{ old('q') }}" placeholder="Recherche de contact...">
 		        <span class="input-group-btn">
 		          <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> </button>
 		        </span>
@@ -19,7 +13,7 @@
 		    </div><!-- /.col-lg-6 -->
 		 {!! Form::close(); !!}
 		
-	<div class="col-md-7 col-md-offset-1 right-btn-filter" >
+	<div class="col-md-8 col-md-offset- right-btn-filter" >
 	<div id="navbar-action" class="navbar-collapse collapse navbar-right" >
 
 	{!! Form::open(['route'=>'societe.action', 'method'=>'POST']) !!}
@@ -29,7 +23,13 @@
 			{!! Form::submit('Exporter',['class' =>'btn btn-default checkaction', 'name'=>'export']) !!}
 		
 			{!! Form::submit('Supprimer',['class' =>'btn btn-danger checkaction', 'name'=>'supp']) !!}
-	
+
+			<!-- <div class="btn-group checkaction" role="group" aria-label="..." style="float:left">
+			  <button type="submit" class="btn btn-default" name="csv" value="csv">CSV</button>
+			  <button type="submit" class="btn btn-default" name="pdf" value="pdt">PDF</button>
+			  <button type="submit" class="btn btn-default" name="xls" value="xls">XLS</button>
+			</div>
+	 -->
 		<!--  Fin boutton d'action -->
 
 		<!-- Button de Recherche -->

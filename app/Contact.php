@@ -20,6 +20,7 @@ class Contact extends Model {
 
 	protected $sortable = [
                            'nom_contact',
+                           'prenoms_contact',
                            'societe_id',
                            'pays_clt',
                            'ville_siege_clt',

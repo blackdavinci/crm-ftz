@@ -27,10 +27,38 @@ class GroupeController extends Controller {
 	public function index()
 	{
 		//
+		$groupes = new Groupe;
 		$actif = 'contact';
-		$groupe = Groupe::where('etat',1)->get();
+
 		$type = 2;
-		return view('contact.contact',compact('actif','type','groupe'));
+
+		if(isset($_GET['sort'])){
+			if($_GET['sort']=='nom_groupe'){
+				$tri = 'alpha';
+				$groupe = $groupes->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='type_groupe'){
+				$tri = 'type';
+				$groupe = $groupes->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='created_at'){
+				$tri = 'ajout';
+				$groupe = $groupes->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='updated_at'){
+				$tri = 'modif';
+				$groupe = $groupes->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='date_groupe'){
+				$tri = 'date';
+				$groupe = $groupes->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='ville_siege_clt'){
+				$tri = 'ville';
+				$societe = $societes->sortable()->where('etat',1)->get();
+			}
+		}else{
+			$tri = 'alpha';
+			$groupe = $groupes->where('etat',1)->orderBy('nom_groupe','asc')->get();
+		}
+
+
+		return view('contact.contact',compact('actif','type','groupe','tri'));
 	}
 
 	/**
@@ -86,6 +114,9 @@ class GroupeController extends Controller {
 	public function edit($id)
 	{
 		//
+		$actif = 'contact'; 
+		$profil = Groupe::findOrFail($id);
+		return view('contact.edit-groupe-crm',compact('actif','profil'));
 	}
 
 	/**** Fonction de tri ******/
@@ -151,9 +182,14 @@ class GroupeController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update($id, CreateGroupeRequest $request)
 	{
 		//
+
+		$profil = Groupe::findOrFail($id);
+		$profil->update($request->all());
+
+		return  redirect(route('groupe.show', $id));
 	}
 
 	/**
@@ -165,6 +201,10 @@ class GroupeController extends Controller {
 	public function destroy($id)
 	{
 		//
+		$groupe = Groupe::findOrFail($id);
+		$groupe->update(['etat'=>0]);
+
+		return redirect(route('groupe.index'));
 	}
 
 }

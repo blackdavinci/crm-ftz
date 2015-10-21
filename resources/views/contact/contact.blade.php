@@ -10,18 +10,22 @@
 	@section('title','Contact Groupe CRM')
 		@section('titre-entete','Contact du groupe CRM '.$groupe->nom_groupe)
 	@endif
-@elseif(isset($note))
-	@section('titre-entete','Tri par Contact sans note ')
+@elseif(isset($tri) && $tri=='notes')
+	@section('titre-entete','Tri Contact sans note ')
+@elseif(isset($tri) && $tri=='societe')
+	@section('titre-entete','Tri Contact par société ')
+@elseif(isset($tri) && $tri=='ville')
+	@section('titre-entete','Tri Contact par ville ')
 @elseif(isset($tri) && $tri=='ajout')
-	@section('titre-entete','Tri par date d\'ajout ')
+	@section('titre-entete','Tri Contact par date d\'ajout ')
 @elseif(isset($tri) && $tri=='modif')
-	@section('titre-entete','Tri par date de modification ')
+	@section('titre-entete','Tri Contact par date de modification ')
 @elseif(isset($tri) && $tri=='pays')
-	@section('titre-entete','Tri par pays')
+	@section('titre-entete','Tri Contact par pays')
 @elseif(isset($tri) && $tri=='client')
-	@section('titre-entete','Tri par catégorie de client ')
+	@section('titre-entete','Tri Contact par catégorie de client ')
 @elseif(isset($tri) && $tri=='alpha')
-	@section('titre-entete','Tri par ordre alphabétique de Z-A ')
+	@section('titre-entete','Tri Contact par ordre alphabétique')
 @elseif(isset($type) && $type=='0')
 	@section('titre-entete','Annuaire des Sociétés ')
 @elseif(isset($type) && $type=='1')
@@ -51,6 +55,7 @@
 
 <div class="col-md-9  affichage-border test">
 	<div class="lettre-index col-md-" >
+		@if($tri!='no-tri')
 		<table class="table table-noborder-top  table-contact" id="contact-letter">
 			<tr>
 				<td>{!! Form::checkbox('seelectall', 'all' , null, ['class' => 'listcheckbox','id'=>'selectall']) !!}</td>
@@ -63,6 +68,7 @@
 				</td>
 			</tr>
 		</table>
+		@endif
 	</div>
 		
 	@if($type==0)
@@ -70,11 +76,11 @@
 	@elseif($type==1)
 		@include('contact.liste-contact')
 	@elseif($type==2)
-		@include('contact.group-crm')
+		@include('contact.list-groupe')
 	@elseif($type==3)
 		@include('contact.list-societe-crm')
 	@elseif($type==4)
-		@include('contact.liste-societe-tri')
+		@include('contact.annuairesearch')
 	@endif
 </div>
 	<div class="col-md-3 content-sidebar" >
@@ -136,6 +142,23 @@ jQuery(function($){
                 });         
             }
         });
+<!-- Function pour la suppression direct -->
+$('.glyphicon-remove').click(function(){
+	var id = $(this).attr('id');
+	var nom = $(this).attr('alt');
+	$('.nom-remove').html(nom);
+
+	if($(this).hasClass('societe')){
+		$('.delete-form').attr('action','societe/l'+id);
+	}
+	if($(this).hasClass('contact')){
+		$('.delete-form').attr('action','contact/l'+id);
+	}
+	if($(this).hasClass('groupe')){
+		$('.delete-form').attr('action','groupe/'+id);
+	}
+	
+});
 
    	<!-- Function pour affichage des actions sur les selects -->
   
@@ -192,7 +215,7 @@ jQuery(function($){
 	
     $( ".sorting" ).children().click(function( event ) {
     	var link = $(this).attr('href');
-    	var linkAll = link+'&query='+$('#searchdata').attr('class')+'&mode='+$('#searchdata').attr('alt');
+    	var linkAll = link+'&query='+$('#searchdata').attr('class')+'&mode='+$('#searchdata').attr('alt')+'&data='+$('#searchdata').attr('align');
     	$(this).attr('href',linkAll);
     });
 
