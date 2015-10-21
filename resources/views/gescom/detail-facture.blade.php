@@ -155,7 +155,7 @@
       	<div class="col-md-6">
       	{{--*/ $n = 0 /*--}}
       		<table class="table table-striped ">
-      			<tr><th>Désignation</th><th>Quantité</th><th>Prix en MAD</th></tr>
+      			<tr><th>Désignation</th><th>Quantité</th><th>Prix en Ousmane</th></tr>
       			<td>
       			@foreach($modules as $modulesbase)
       				@if($modulesbase->type_module=='Base' && $modulesbase->pivot->quantite > 0)
