@@ -131,6 +131,24 @@ jQuery(function($){
 
         }
     }); 
+    <!-- Fonction pour la suppresion -->
+    <!-- Function pour la suppression direct -->
+$('.glyphicon-remove').click(function(){
+	var id = $(this).attr('id');
+	var nom = $(this).attr('alt');
+	$('.nom-remove').html(nom);
+
+	if($(this).hasClass('devis')){
+		$('.delete-form').attr('action','devis/l'+id);
+	}
+	if($(this).hasClass('livraison')){
+		$('.delete-form').attr('action','livraison/l'+id);
+	}
+	if($(this).hasClass('facutre')){
+		$('.delete-form').attr('action','facture/l'+id);
+	}
+	
+});
    
    
 });

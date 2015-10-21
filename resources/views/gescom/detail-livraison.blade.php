@@ -27,9 +27,11 @@
 		    <a class="btn btn-primary btn-smenu-position" href="{{ route('module.creer',[$profil->id])}}" role="button">
 				<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Imprimer
 			</a>
-			<a class="btn btn-primary btn-smenu-position" href="{{ route('module.creer',[$profil->id])}}" role="button">
-				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Générer Facture
-			</a>
+			<!-- Button de Bon de livraison modal -->
+			<button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal-facture">
+			  <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Générer Facture
+			</button>
+
 		    <a class="btn btn-warning btn-smenu-position" href="{{ route('devis.editer',[$profil->id])}}" role="button">
 				<span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Modifier | Mise à jour
 			</a>
@@ -203,5 +205,38 @@
       </div>
 	 
 	  </div>
+	</div>
+
+			<!-- Modal de génération de bon de livraison -->
+			<div class="modal fade" id="myModal-facture" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			  {!! Form::open(['url'=> route('facture.store',[$profil->id]), 'method'=>'POST','class'=>'form-horizontal']) !!}
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">Veuillez entrer le DA de la facture</h4>
+			      </div>
+			      <div class="modal-body">
+			     		<div class="form-group">
+							<label class="col-md-4 control-label">Numéro DA</label>
+							<div class="col-md-6">
+								<input type="text" class="form-control" name="da" value="{{ old('da') }}">
+							</div>
+						</div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+			        <div class="pull-right" style="margin-left:5px;">
+			        	{!! Form::hidden('id',$profil->id) !!}
+				        {!! Form::submit('Générer',['class'=>'btn btn-warning btn-smenu-position'])!!}
+			        	
+			      	</div>
+			      </div>
+			    </div>
+			    {!! Form::close() !!}
+			  </div>
+			</div>
+			 
+		</div>
 	</div>
 @stop

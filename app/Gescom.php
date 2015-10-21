@@ -9,4 +9,6 @@ class Gescom extends Model
     //
 
     protected $guarded = ['timestamps'];
+
+   
 }

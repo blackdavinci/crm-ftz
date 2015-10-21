@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Devis;
 use App\Livraison;
 use App\Produit;
+use App\Facture;
 use DB;
 
 class FactureController extends Controller {
@@ -46,9 +47,60 @@ class FactureController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request)
 	{
-		//
+		$profil = Livraison::with('devis')->findOrfail($request->input('id'));
+		
+		foreach ($profil->modules as $key => $value) {
+			$produit_id = $value->pivot->produit_id;
+		}
+		$produit = Produit::findOrFail($produit_id);
+		$produits = $produit->modules;
+		$modules = $profil->modules;
+
+		$da = $request->input('da');
+		
+
+		$dv_prefix = $produit->prefix_produit;
+		$dv_suffix = $produit->suffix_produit;
+
+		$facture_number = DB::table('factures')->select('num_facture')->where('num_facture','like','%FACT-'.$dv_prefix.'%')->orderBy('id', 'desc')->first();
+			var_dump($facture_number);
+			if(empty($facture_number)){
+				$num_facture = 'FACT-'.$dv_prefix.'-'.date('y').date('m').$dv_suffix;
+				
+			}else{
+				
+				foreach ($facture_number as $fctvalue) {
+						$last_fct_number = $fctvalue;
+					}
+				$lg = strlen('FACT-'.$dv_prefix.'-')+4;
+				$inc_fct_number = substr($last_fct_number,$lg)+1;
+				$num_facture = 'FACT-'.$dv_prefix.'-'.date('y').date('m').$inc_fct_number;
+			}
+			
+		$societedata = DB::table('societedatas')->select('id')->orderBy('created_at', 'desc')->first();
+
+		$data = ['num_facture'=>$num_facture,'devis_id'=>$profil->id,'num_da'=>$da,'livraison_id'=>$profil->id,
+					'suivi_facture'=>$profil->suivi_bl,'destinataire'=>$profil->destinataire,'adresse_dest'=>$profil->adresse_dest,
+					'pays_dest'=>$profil->pays_dest,'ville_dest'=>$profil->ville_dest,'tel_dest'=>$profil->tel_dest,'ref_dest'=>$profil->ref_dest,
+					'num_cmd'=>$profil->num_cmd,'livraison_modal'=>$num_facture,'contact_dest'=>$profil->contact_dest,'societedata_id'=>$societedata->id,'fax_dest'=>$profil->fax_dest,
+					'email_dest'=>$profil->email_dest,'url_dest'=>$profil->url_dest,'nom_produit'=>$profil->nom_produit,'echeance'=>$profil->echeance,
+					'total_ht'=>$profil->total_ht,'total_anpme'=>$profil->total_anpme,'total_part'=>$profil->total_part,'gescom_id'=>$profil->gescom_id,
+					'contact_id'=>$profil->contact_id,'societe_id'=>$profil->societe_id];
+		
+		$facture = Facture::create($data);
+
+		$modules = $profil->modules;
+
+		foreach ($modules as $value) {
+			$facture->modules()->attach($value->pivot->module_id,
+					['quantite'=>$value->pivot->quantite,'produit_id'=>$value->pivot->produit_id,
+					'service_duree'=>$value->pivot->service_duree]);
+		}
+		$id = $facture->id;
+		
+		return redirect()->route('facture.show',$id);
 	}
 
 	/**
@@ -57,58 +109,21 @@ class FactureController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Request $request)
+	public function show($id)
 	{
 		//
-
-		$profil = Livraison::findOrfail($request->input('id'));
+		$actif = 'gescom';
+		$profil = Facture::with('societedata','livraison','gescom')->findOrfail($id);
 		
 		foreach ($profil->modules as $key => $value) {
 			$produit_id = $value->pivot->produit_id;
 		}
 		$produit = Produit::findOrFail($produit_id);
-		$produits = $produit->modules;
-
-		// var_dump($profil);
-		// var_dump($produits);
-
-		$cle = $request->input('cle');
-		$mac = $request->input('mac');
-
-		$dv_prefix = $produit->prefix_produit;
-		$dv_suffix = $produit->suffix_produit;
-
-		$livraison_number = DB::table('livraisons')->select('num_bl')->where('num_bl','like','%BL-'.$dv_prefix.'%')->orderBy('id', 'desc')->first();
-			if(empty($livraison_number)){
-				$num_bl = 'BL-'.$dv_prefix.'-'.date('y').date('m').$dv_suffix;
-			}else{
-				foreach ($livraison_number as $blvalue) {
-						$last_bl_number = $blvalue;
-					}
-				$lg = strlen('BL-'.$dv_prefix.'-')+4;
-				$inc_lv_number = substr($last_bl_number,$lg)+1;
-				$num_bl = 'BL-'.$dv_prefix.'-'.date('y').date('m').$inc_lv_number;
-			}
-
-		$societedata = DB::table('societedatas')->select('id')->orderBy('created_at', 'desc')->first();
-
-		$data = ['num_bl'=>$num_bl,'devis_id'=>$profil->id,'num_cle'=>$cle,'num_mac'=>$mac,
-					'suivi_bl'=>$profil->suivi_devis,'destinataire'=>$profil->nom_scliente,'adresse_dest'=>$profil->adresse_scliente,
-					'pays_dest'=>$profil->pays_clt,'ville_dest'=>$profil->ville_clt,'tel_dest'=>$profil->tel_clt,'ref_dest'=>$profil->ref_client,
-					'num_cmd'=>$profil->num_devis,'livraison_modal'=>$num_bl,'contact_dest'=>$profil->nom_scontact,'societedata_id'=>$societedata->id,'fax_dest'=>$profil->fax_clt,
-					'email_dest'=>$profil->email_clt,'url_dest'=>$profil->url_clt,'nom_produit'=>$profil->produit];
-		
-		$livraison = Livraison::create($data);
-
 		$modules = $profil->modules;
 
-		foreach ($modules as $value) {
-			$livraison->modules()->attach($value->pivot->module_id,
-					['quantite'=>$value->pivot->produit_quantite,'produit_id'=>$value->pivot->produit_id]);
-		}
-		$id = $livraison->id;
 		
-		return redirect()->route('livraison.show',$id);
+		return view('gescom.detail-facture', compact('actif','profil','modules'));
+		
 	}
 
 	/**

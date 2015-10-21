@@ -131,9 +131,9 @@
 
 	  	<td>
 	  		<div class="action-place">
-	  		<ul>
-		  	    <li style="margin-bottom: 12px"><a href="{{ route('devis.editer',[$devis->id])}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
-		  		<li><a href="#" data-toggle="modal" data-target="#myModalListe"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
+	  		<ul class="action-list">
+		  		<li><a href="#" data-toggle="modal"  alt="" data-target="#myModalListe"><span id="{{$devis->id}}" alt="{{$devis->num_devis}}" class="glyphicon glyphicon-remove devis" aria-hidden="true"></span></a></li>
+		  	    <li style="margin-right:8px"><a href="{{ route('devis.editer',[$devis->id])}}" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
 	 		</ul> 
 	 		</div>
 	  	</td>
@@ -151,21 +151,24 @@
 {!! Form::close() !!}
 
 <!-- Modal de confirmation de suppression -->
-@if(!empty($id))
+
 	<div class="modal fade" id="myModalListe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">Suppression de société</h4>
+	        <h4 class="modal-title" id="myModalLabel">Suppression de devis</h4>
 	      </div>
 	      <div class="modal-body">
-	        Voulez-vous vraimment supprimer la société <strong>@if(!empty($nom)){{ $nom }} @endif</strong> ?
+	        Voulez-vous vraimment supprimer le devis <strong><span class="nom-remove"></span> </strong> ?
 	      </div> 
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
 	        <div class="pull-right" style="margin-left:5px;">
-		        {!! Form::open(['url'=> route('devis.destroy',$id), 'method'=>'delete']) !!}
+		      
+		        <form class="delete-form" role="form" method="POST" >
+		        	<input name="_method" type="hidden" value="DELETE">
+		        	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		      		{!! Form::submit('Supprimer',['class'=>'btn btn-warning btn-smenu-position'])!!}
 		      	{!! Form::close() !!}
 	      	</div>
@@ -173,5 +176,4 @@
 	    </div>
 	  </div>
 	</div>
-@endif
 

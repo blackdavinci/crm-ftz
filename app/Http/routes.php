@@ -305,6 +305,8 @@ Route::get('getRequest','SocieteController@GetRequestSocieteExist');
 
 Route::post('societe/action',['as'=>'societe.action','uses'=>'ActionController@DeleteChecked']);
 
+Route::post('devis/action',['as'=>'devis.action','uses'=>'ActionController@DeleteCheckedDocs']);
+
 Route::get('societe/Tri/{tripar}',['as'=>'societe.TriSociete', 'uses'=>'SocieteController@TriSociete']);
 
 Route::get('groupe/Tri/{tripar}/{id}',['as'=>'groupe.Trigroupe', 'uses'=>'GroupeController@Trigroupe']);

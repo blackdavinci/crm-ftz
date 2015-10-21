@@ -8,7 +8,7 @@
 @elseif($type==3)
 	@if(isset($groupe))
 	@section('title','Contact Groupe CRM')
-		@section('titre-entete','Contact du groupe CRM '.$groupe->nom_groupe)
+		@section('titre-entete','Contact du groupe CRM '.$groupe->nom_groupe.' '.$groupe->date_groupe.' ('.$groupe->type_groupe.')')
 	@endif
 @elseif(isset($tri) && $tri=='notes')
 	@section('titre-entete','Tri Contact sans note ')
@@ -149,7 +149,7 @@ $('.glyphicon-remove').click(function(){
 	$('.nom-remove').html(nom);
 
 	if($(this).hasClass('societe')){
-		$('.delete-form').attr('action','societe/l'+id);
+		$('.delete-form').attr('action','societe/'+id);
 	}
 	if($(this).hasClass('contact')){
 		$('.delete-form').attr('action','contact/l'+id);

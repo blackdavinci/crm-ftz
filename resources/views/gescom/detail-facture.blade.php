@@ -4,7 +4,7 @@
 @section('title','Facture')
 @section('titre-entete')
 	<div class="pull-left" style="margin:-6px 4px 4px 4px;">
-			{{ 'Facture  '.$profil->num_bl }}
+			{{ 'Facture  '.$profil->num_facture }}
 	</div>
 @stop
 
@@ -27,9 +27,7 @@
 		    <a class="btn btn-primary btn-smenu-position" href="{{ route('module.creer',[$profil->id])}}" role="button">
 				<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Imprimer
 			</a>
-			<a class="btn btn-primary btn-smenu-position" href="{{ route('module.creer',[$profil->id])}}" role="button">
-				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Générer Facture
-			</a>
+			
 		    <a class="btn btn-warning btn-smenu-position" href="{{ route('devis.editer',[$profil->id])}}" role="button">
 				<span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Modifier | Mise à jour
 			</a>
@@ -43,15 +41,15 @@
 			    <div class="modal-content">
 			      <div class="modal-header">
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="myModalLabel">Suppression du bon de livraison</h4>
+			        <h4 class="modal-title" id="myModalLabel">Suppression de facture</h4>
 			      </div>
 			      <div class="modal-body">
-			        Voulez-vous vraimment supprimer le bon de livraison <strong>{{ $profil->num_bl }}</strong> ?
+			        Voulez-vous vraimment supprimer la facture <strong>{{ $profil->num_facture }}</strong> ?
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
 			        <div class="pull-right" style="margin-left:5px;">
-				        {!! Form::open(['url'=> route('livraison.destroy',[$profil->id]), 'method'=>'delete']) !!}
+				        {!! Form::open(['url'=> route('facture.destroy',[$profil->id]), 'method'=>'delete']) !!}
 				      		{!! Form::submit('Supprimer',['class'=>'btn btn-warning btn-smenu-position'])!!}
 				      	{!! Form::close() !!}
 			      	</div>
@@ -68,7 +66,7 @@
 @section('content')
 	<div class="panel panel-default">
 	  <div class="panel-heading">
-	    <span ><strong style="text-align: center">Devis {{ $profil->num_devis }}</strong></span> 
+	    <span ><strong style="text-align: center">Facture {{ $profil->num_facture }}</strong></span> 
 	  </div>
 	  <div class="panel-body" >
 	    <!-- Ligne d'information sur la société et le devis -->
@@ -99,8 +97,8 @@
       <div class="col-md-5 pull-right">
         <div class=" cadre-info panel-default">
           <div class="panel-body ">
-          	<h4><strong>Bon de Livraison</strong></h4>
-	  		<h4 class="num-devis"> {{ $profil->num_bl }}</h4>
+          	<h4><strong>Facture</strong></h4>
+	  		<h4 class="num-devis"> {{ $profil->num_facture }}</h4>
           </div>
          </div> 
         </div>
@@ -116,12 +114,12 @@
            		<br/><strong>Ref Fournisseur</strong>
            		<br/>{{ $profil->ref_dest }}
            		<br/><strong>Numéro de la commande :</strong>
-           		<br/>{{ $profil->num_bl }}<br/>
+           		<br/>{{ $profil->num_facture }}<br/>
            		<br/><strong>Date de la commande : </strong>
-           		<br/>{{ $profil->devis->created_at->format('d/m/Y') }}<br/>
-           		<br/><strong>Modalités de livraison</strong>
+           		<br/>{{ $profil->livraison->created_at->format('d/m/Y') }}<br/>
+           		<br/><strong>Modalités de facture</strong>
            		<br/>Livré à l'adresse {{ $profil->destinataire }}<br/>
-           		<br/><strong>{{ $profil->devis->nom_scontact }}</strong>
+           		<br/><strong>{{ $profil->contact_dest }}</strong>
            </h5>
           </div>
         </div>  
@@ -150,14 +148,14 @@
 
       <div class="row">
       	<div class="col-md-12">
-      		<h4 style="text-align: center">Livraison</h4>
+      		<h4 style="text-align: center">Facture</h4>
       	</div>
       </div>
       <div class="row">
       	<div class="col-md-6">
       	{{--*/ $n = 0 /*--}}
       		<table class="table table-striped ">
-      			<tr><th>Désignation</th><th>Quantité</th></tr>
+      			<tr><th>Désignation</th><th>Quantité</th><th>Prix en {{$profil->gescom->devise}}</th></tr>
       			<td>
       			@foreach($modules as $modulesbase)
       				@if($modulesbase->type_module=='Base' && $modulesbase->pivot->quantite > 0)

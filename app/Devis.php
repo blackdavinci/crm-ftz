@@ -28,6 +28,6 @@ class Devis extends Model {
     }
 
     public function modules(){
-        return $this->belongsToMany('App\Module')->withPivot('produit_quantite', 'produit_remise','produit_id')->withTimestamps();
+        return $this->belongsToMany('App\Module')->withPivot('produit_quantite', 'produit_remise','produit_id','service_duree')->withTimestamps();
     }
 }

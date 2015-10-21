@@ -417,7 +417,10 @@ class DevisController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		
+		$devis = Devis::findOrFail($id);
+		$devis->update(['etat_devis'=>0]);
+		return  redirect(route('gescom.index'));
 	}
 
 }

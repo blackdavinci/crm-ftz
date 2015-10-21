@@ -28,7 +28,8 @@ class LivraisonController extends Controller {
 	public function index()
 	{
 		//
-		$livraison = Livraison::with('societe','contact','gescom')->where('etat',1)->orderBy('created_at','desc')->get();
+		$livraison = Livraison::with('devis')->where('etat',1)->orderBy('created_at','desc')->get();
+		// $devis = Devis::with('societe','contact','gescom')->where('etat_devis',1)->orderBy('created_at','desc')->get();
 		$actif = 'gescom';
 		$type = 1;
 		$tri = 'aucun';
@@ -92,7 +93,9 @@ class LivraisonController extends Controller {
 					'suivi_bl'=>$profil->suivi_devis,'destinataire'=>$profil->nom_scliente,'adresse_dest'=>$profil->adresse_scliente,
 					'pays_dest'=>$profil->pays_clt,'ville_dest'=>$profil->ville_clt,'tel_dest'=>$profil->tel_clt,'ref_dest'=>$profil->ref_client,
 					'num_cmd'=>$profil->num_devis,'livraison_modal'=>$num_bl,'contact_dest'=>$profil->nom_scontact,'societedata_id'=>$societedata->id,'fax_dest'=>$profil->fax_clt,
-					'email_dest'=>$profil->email_clt,'url_dest'=>$profil->url_clt,'nom_produit'=>$profil->produit];
+					'email_dest'=>$profil->email_clt,'url_dest'=>$profil->url_clt,'nom_produit'=>$profil->produit,'echeance'=>$profil->echeance_devis,
+					'total_ht'=>$profil->total_ht,'total_anpme'=>$profil->total_anpme,'total_part'=>$profil->total_part,'gescom_id'=>$profil->gescom_id,
+					'contact_id'=>$profil->contact_id,'societe_id'=>$profil->societe_id];
 		
 		$livraison = Livraison::create($data);
 
@@ -100,7 +103,8 @@ class LivraisonController extends Controller {
 
 		foreach ($modules as $value) {
 			$livraison->modules()->attach($value->pivot->module_id,
-					['quantite'=>$value->pivot->produit_quantite,'produit_id'=>$value->pivot->produit_id]);
+					['quantite'=>$value->pivot->produit_quantite,'produit_id'=>$value->pivot->produit_id,
+					'service_duree'=>$value->pivot->service_duree]);
 		}
 		$id = $livraison->id;
 		
@@ -160,7 +164,9 @@ class LivraisonController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		$livraison = Livraison::findOrFail($id);
+		$livraison->update(['etat'=>0]);
+		return  redirect(route('gescom.index'));
 	}
 
 }

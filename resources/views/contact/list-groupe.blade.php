@@ -15,6 +15,10 @@
 
 	<table class="table table-noborder-top table-bordere table-contact">
 
+	@if($societe->isEmpty())
+			<h3 style="text-align: center; color:#ddd">Aucun contact n'est associé est à ce groupe CRM</h3>
+	@endif
+
 	@foreach($groupe as $groupe)
 
 <!-- Condition pour les tris  -->

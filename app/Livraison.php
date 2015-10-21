@@ -15,6 +15,10 @@ class Livraison extends Model {
         return $this->belongsTo('App\Devis');
     }
 
+    public function facture(){
+        return $this->hasOne('App\Facture');
+    }
+
     public function contact(){
 
     		return $this->belongsTo('App\Contact');
@@ -30,7 +34,7 @@ class Livraison extends Model {
         }
 
     public function modules(){
-        return $this->belongsToMany('App\Module')->withPivot('quantite','produit_id')->withTimestamps();
+        return $this->belongsToMany('App\Module')->withPivot('quantite','produit_id','service_duree')->withTimestamps();
     }
 
 }

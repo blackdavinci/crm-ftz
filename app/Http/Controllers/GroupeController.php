@@ -96,13 +96,62 @@ class GroupeController extends Controller {
 	public function show($id)
 	{
 		//
-		$societegr = Groupe::findOrFail($id)->societe()->where('etat',1)->get();
+		
 		$groupe = Groupe::findOrFail($id);
 		$actif = 'contact';
 		$type = 3;
 		$tri = 'none';
+		if(isset($_GET['sort'])){
+			if($_GET['sort']=='pays_clt'){
+				$tri = 'pays';
+				$societe = Groupe::findOrFail($id)->societe()->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='statut'){
+				$tri = 'client';
+				$societe =Groupe::findOrFail($id)->societe()->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='created_at'){
+				$tri = 'ajout';
+				$societe = Groupe::findOrFail($id)->societe()->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='updated_at'){
+				$tri = 'modif';
+				$societe = Groupe::findOrFail($id)->societe()->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='nom_clt'){
+				$tri = 'alpha';
+				$societe = Groupe::findOrFail($id)->societe()->sortable()->where('etat',1)->get();
+			}elseif($_GET['sort']=='ville_siege_clt'){
+				$tri = 'ville';
+				$societe = Groupe::findOrFail($id)->societe()->sortable()->where('etat',1)->get();
+			}elseif('notes'){
+				$match= ['societes.etat'=>1,'societes.groupe_id'=>$id];
+				$note = DB::table('societes')
+				            ->join('contacts', 'societes.id', '=', 'contacts.societe_id')
+				            ->join('notes', 'contacts.id', '=', 'notes.contact_id')
+				            ->select('societes.*', 'notes.*')->where($match)
+				            ->get();
+				$societes = Societe::where('etat',1)->orderBy('nom_clt','asc')->get();
+				$tri = 'notes';
+
+				// Tri des contacts sans note
+				foreach ($societes as $key => $value) {
+					$exist = 0;
+					foreach ($note as $keyn => $valuen) {
+						if($value->nom_clt == $valuen->nom_clt){
+							$exist = 1;
+						}
+					}
+
+					if($exist==0){
+						$societe [] = $value;
+					}
+						
+				}
+			}	
+			
+		}else{
+			$tri = 'alpha';
+			$societe = Groupe::findOrFail($id)->societe()->where('etat',1)->orderBy('nom_clt','asc')->get();
+		}
 		
-		return view('contact.contact', compact('actif','societegr','type','tri','groupe'));
+		return view('contact.contact', compact('actif','societe','type','tri','groupe'));
 	}
 
 	/**
