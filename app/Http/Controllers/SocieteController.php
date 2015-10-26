@@ -109,7 +109,8 @@ class SocieteController extends Controller {
 		$actif='contact';
 		$groupes = [];
 		$groupe['null'] = 'Choisissez le groupe auquel appartient la société';
-		$ListGroupeCRM = DB::table('groupes')->select('id','nom_groupe','date_groupe')->get();
+		$ListGroupeCRM = DB::table('groupes')->select('id','nom_groupe','date_groupe')->where('etat',1)->get();
+
 		foreach ($ListGroupeCRM as $key => $value) {
 			$groupe[$value->id] = $value->nom_groupe.' '.$value->date_groupe;
 		}
@@ -124,7 +125,7 @@ class SocieteController extends Controller {
 		$actif='contact';
 		$groupes = [];
 		$groupe['null'] = '';
-		$ListGroupeCRM = DB::table('groupes')->select('id','nom_groupe','date_groupe')->get();
+		$ListGroupeCRM = DB::table('groupes')->select('id','nom_groupe','date_groupe')->where('etat',1)->get();
 		foreach ($ListGroupeCRM as $key => $value) {
 			$groupe[$value->id] = $value->nom_groupe.' '.$value->date_groupe;
 		}
