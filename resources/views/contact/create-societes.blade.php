@@ -1,7 +1,7 @@
 @extends('default')
 
 @section('title','Contact')
-@section('titre-entete','Nouvelle sociétés')
+@section('titre-entete','Nouvelle société')
 
 @include('default.top-nav')
 @include('default.left-nav')
