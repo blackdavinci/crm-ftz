@@ -61,7 +61,7 @@
   		@endforeach
   		@foreach($contacts as $contact)
   			<tr>
-  				<td><h5><span class="label label-success">Contact </span></h5></td>
+  				<td><h5><span class="label label-contact">Contact </span></h5></td>
   				<td><h5><a href="{{route('contact.show',[$contact->id])}}">{{$contact->nom_contact.' '.$contact->prenoms_contact}}</a></h5></td>
   			 <td><h5>{{$contact->created_at->format('d/m/Y')}}</h5></td>
         </tr>
@@ -69,7 +69,7 @@
   		@endforeach
   		@foreach($societes as $societe)
   			<tr>
-  				<td><h5><span class="label label-success">Société </span></h5></td>
+  				<td><h5><span class="label label-societe">Société </span></h5></td>
   				<td><h5><a href="{{route('societe.show',[$societe->id])}}">{{$societe->nom_clt}}</a></h5></td>
           <td><h5>{{$societe->created_at->format('d/m/Y')}}</h5></td>
   			</tr>
@@ -77,7 +77,7 @@
   		@endforeach
   		@foreach($devis as $devis)
   			<tr>
-  				<td><h5><span class="label label-success">Devis </span></h5></td>
+  				<td><h5><span class="label label-devis">Devis </span></h5></td>
   				<td><h5><a href="{{route('devis.show',[$devis->id])}}">{{$devis->num_devis}}</a></h5></td>
           <td><h5>{{$devis->created_at->format('d/m/Y')}}</h5></td>
   			</tr>

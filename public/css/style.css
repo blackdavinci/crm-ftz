@@ -634,3 +634,12 @@ top:15px;
 	padding:0px;
 	border-top:0px;
 }
+.label-societe {
+  background-color: #eb9821;
+}
+.label-contact {
+  background-color: #e60ec0;
+}
+.label-devis {
+  background-color: #8d0ee6;
+}
