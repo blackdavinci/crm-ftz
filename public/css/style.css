@@ -626,3 +626,11 @@ right:70px;
 top:15px;
 
 }
+
+/***************** Style Page d'Accueil*************************/
+
+.table-recent>tbody>tr>td
+{
+	padding:0px;
+	border-top:0px;
+}

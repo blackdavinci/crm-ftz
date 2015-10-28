@@ -40,52 +40,51 @@
 <div class="panel panel-default">
   <div class="panel-heading"><strong>Activités récentes </strong></div>
   <div class="panel-body" >
-  	<table class="table">
+  	<table class="table table-recent">
   		@foreach($notes as $note)
   			<tr>
   				@if($note->categorie == 'A faire')
-  				  <td><h4><span class="label label-info">A faire </span></h4></td>
+  				  <td><h5><span class="label label-info">A faire </span></h5></td>
   				@elseif($note->categorie == 'Appel téléphonique')
-  				  <td><h4><span class="label label-primary">Appel téléphonique </span></h4></td>
+  				  <td><h5><span class="label label-primary">Appel téléphonique </span></h5></td>
   				@elseif($note->categorie == 'E-mail')
-				  <td><h4><span class="label label-warning">E-mail </span></h4></td>
+				  <td><h5><span class="label label-warning">E-mail </span></h5></td>
   				@elseif($note->categorie == 'Réunion')
-				  <td><h4><span class="label label-success">Réunion </span></h4></td>
+				  <td><h5><span class="label label-success">Réunion </span></h5></td>
   				@elseif($note->categorie == 'Autre')
-				  <td><h4><span class="label label-default">Autre </span></h4></td>
+				  <td><h5><span class="label label-default">Autre </span></h5></td>
   				@endif 
-  				<td><a href="{{$note->id}}/afficher-note/1">{{$note->nom}}</a></td>
+  				<td><h5><a href="{{$note->id}}/afficher-note/1">{{$note->nom}}</a></h5></td>
+          <td><h5>{{$note->created_at->format('d/m/Y')}}</h5></td>
   			</tr>
   			
   		@endforeach
   		@foreach($contacts as $contact)
   			<tr>
-  				<td><h4><span class="label label-success">Contact </span></h4></td>
-  				<td><a href="{{route('contact.show',[$contact->id])}}">{{$contact->nom_contact.' '.$contact->prenoms_contact}}</a></td>
-  			</tr>
+  				<td><h5><span class="label label-success">Contact </span></h5></td>
+  				<td><h5><a href="{{route('contact.show',[$contact->id])}}">{{$contact->nom_contact.' '.$contact->prenoms_contact}}</a></h5></td>
+  			 <td><h5>{{$contact->created_at->format('d/m/Y')}}</h5></td>
+        </tr>
   			
   		@endforeach
   		@foreach($societes as $societe)
   			<tr>
-  				<td><h4><span class="label label-success">Société </span></h4></td>
-  				<td><a href="{{route('societe.show',[$societe->id])}}">{{$societe->nom_clt}}</a></td>
+  				<td><h5><span class="label label-success">Société </span></h5></td>
+  				<td><h5><a href="{{route('societe.show',[$societe->id])}}">{{$societe->nom_clt}}</a></h5></td>
+          <td><h5>{{$societe->created_at->format('d/m/Y')}}</h5></td>
   			</tr>
   			
   		@endforeach
   		@foreach($devis as $devis)
   			<tr>
-  				<td><h4><span class="label label-success">Devis </span></h4></td>
-  				<td><a href="{{route('devis.show',[$devis->id])}}">{{$devis->num_devis}}</a></td>
+  				<td><h5><span class="label label-success">Devis </span></h5></td>
+  				<td><h5><a href="{{route('devis.show',[$devis->id])}}">{{$devis->num_devis}}</a></h5></td>
+          <td><h5>{{$devis->created_at->format('d/m/Y')}}</h5></td>
   			</tr>
   			
   		@endforeach
   	</table>
-  
-		<p>
-			is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-			the industry's standard dummy text ever since the 1500s, when an unknown printer
-			
-		</p>
+
 
   </div>
 </div>
