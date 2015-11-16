@@ -46,28 +46,21 @@
 			{!! Form::text('username',$profil->username, ['class' =>'form-control input-sm']) !!}
 		</div>
 	</div>
-	<div class="form-group">
-	  	<label class="col-sm-3 control-label">{!! Form::label('naissance','Date de naissance') !!}</label>
-	  	<div class="col-md-8">
-			<div class="input-group date form_date col-md-12" data-date="" data-date-format="yyyy-mm-dd" data-link-field="date" data-link-format="yyyy-mm-dd">
-	            <input class="form-control" type="text" name="naissance" value="{{$profil->naissance}}" readonly>
-	            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-				<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-	        </div>
-	    </div>
-	</div>
+
 	<div class="form-group">
 	  	<label class="col-sm-3 control-label">{!! Form::label('fonction','Fonction') !!}</label>
 	  	<div class="col-md-8">
 			{!! Form::text('fonction',$profil->fonction, ['class' =>'form-control input-sm']) !!}
 		</div>
 	</div>
-	<div class="form-group">
-	  	<label class="col-sm-3 control-label">{!! Form::label('role','Rôle') !!}</label>
-	  	<div class="col-md-8">
-			{!! Form::select('role',['admin'=>'Administrateur','simple'=>'Simple Utilisateur'],$profil->role, ['class' =>'form-control input-sm']) !!}
+	@if (Auth::user()->role == 'admin')
+		<div class="form-group">
+		  	<label class="col-sm-3 control-label">{!! Form::label('role','Rôle') !!}</label>
+		  	<div class="col-md-8">
+				{!! Form::select('role',['admin'=>'Administrateur','simple'=>'Simple Utilisateur'],$profil->role, ['class' =>'form-control input-sm']) !!}
+			</div>
 		</div>
-	</div>
+	@endif
 	<div class="form-group">
 		<label class="col-sm-3 control-label">{!! Form::label('tel','Téléphone') !!}</label>
 		<div class="col-md-8">
@@ -87,27 +80,28 @@
 			{!! Form::text('adresse',$profil->adresse, ['class' =>'form-control input-sm']) !!}	
 		</div>
 	</div>
-
-	<div class="form-group">
-		<label class="col-sm-3 control-label">{!! Form::label('etat','Etat') !!}</label>
-		<div class="col-md-8">
-			@if($profil->active=="1")
-				<label class="radio-inline">
-				 	{!!  Form::radio('active', '1', true); !!} Activé
-				</label>
-				<label class="radio-inline">
-				 	 {!!  Form::radio('active', '2'); !!} Désactivé
-				</label>
-			@else 
-				<label class="radio-inline">
-				 	{!!  Form::radio('active', '1'); !!} Activé
-				</label>
-				<label class="radio-inline">
-				 	 {!!  Form::radio('active', '2',true); !!} Désactivé
-				</label>
-			@endif
+	@if (Auth::user()->role == 'admin')
+		<div class="form-group">
+			<label class="col-sm-3 control-label">{!! Form::label('etat','Etat') !!}</label>
+			<div class="col-md-8">
+				@if($profil->active=="1")
+					<label class="radio-inline">
+					 	{!!  Form::radio('active', '1', true); !!} Activé
+					</label>
+					<label class="radio-inline">
+					 	 {!!  Form::radio('active', '2'); !!} Désactivé
+					</label>
+				@else 
+					<label class="radio-inline">
+					 	{!!  Form::radio('active', '1'); !!} Activé
+					</label>
+					<label class="radio-inline">
+					 	 {!!  Form::radio('active', '2',true); !!} Désactivé
+					</label>
+				@endif
+			</div>
 		</div>
-	</div>
+	@endif
 
 </div>
 

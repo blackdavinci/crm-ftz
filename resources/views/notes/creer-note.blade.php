@@ -50,9 +50,13 @@
 	{!! Form::select('type',$typenote,'Prospect',['class' =>'form-control input-sm']) !!}		
 		
 
-
-		{!! Form::label('contact','Pour le contact')!!}
-	  	{!! Form::select('contact_id',$contacts,null,['class' =>'form-control input-sm','id'=>'destinataire']) !!}
+@if(isset($id))
+	{!! Form::hidden('contact_id_create',$id) !!}	
+	{!! Form::hidden('contact_id',$id) !!}	
+@else
+	{!! Form::label('contact','Pour le contact')!!}
+	{!! Form::select('contact_id',$contacts,null,['class' =>'form-control input-sm','id'=>'destinataire']) !!}
+@endif
 		
 			{!! Form::label('destination','Attribué à')!!}
 		  	{!! Form::select('id_user_destination',$users,Auth::user()->id,['class' =>'form-control input-sm','id'=>'user']) !!}

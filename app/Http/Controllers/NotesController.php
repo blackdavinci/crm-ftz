@@ -106,7 +106,7 @@ class NotesController extends Controller {
 				}
 				$users[Auth::user()->id] = 'Moi';
 		
-		return view('notes.create',compact('actif','id','users'));
+		return view('notes.creer-note',compact('actif','id','users'));
 	}
 	/**
 	 * Store a newly created resource in storage.
