@@ -124,7 +124,7 @@ class SocieteController extends Controller {
 		//
 		$actif='contact';
 		$groupes = [];
-		$groupe['null'] = '';
+		
 		$ListGroupeCRM = DB::table('groupes')->select('id','nom_groupe','date_groupe')->where('etat',1)->get();
 		foreach ($ListGroupeCRM as $key => $value) {
 			$groupe[$value->id] = $value->nom_groupe.' '.$value->date_groupe;
@@ -158,14 +158,18 @@ class SocieteController extends Controller {
 
 		$check = DB::table('societes')->select('nom_clt')->where('nom_clt',$societecheck)->count();
 
+
+
 		if($check==0 ){
 
-			foreach ($request->all() as $key => $value) {
-				if($key != 'add_contact'){
-					$data[$key] = $value;
-				}
-			}
-			Societe::create($data);
+			
+
+			$data = $request->except(['groupe_id','add_contact']);	
+
+			$societe = Societe::create($data);
+
+			$societe->groupes()->sync($request->input('groupe_id'));
+
 			$id = DB::table('societes')->select('id')->orderBy('id', 'desc')->first();
 			foreach ($id as $value) {
 				$id = $value;
@@ -204,7 +208,7 @@ class SocieteController extends Controller {
 	{
 		//
 		$actif ='contact';
-		$profil = Societe::with('groupe')->findOrFail($id);
+		$profil = Societe::findOrFail($id);
 		$ListContact = Societe::findOrFail($id)->contacts()->where('etat',1)->get();
 		
 		return view('contact.profil-societe',compact('actif','profil','ListContact'));

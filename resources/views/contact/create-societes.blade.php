@@ -86,12 +86,14 @@
           <h4>Contact(s)</h4>
           <div class="trait pull-left"></div>
         </header>
+       
         <div class="form-group">
-          <div class="col-sm-12">
-            {!! Form::label('groupecrm','Groupe CRM') !!}
-            {!! Form::select('groupe_id',$groupe,old('groupe_id'),['class' =>'form-control input-sm']) !!}
+          <div class="col-md-12">
+            {!! Form::label('groupecrm','Groupe(s) CRM') !!}
+            {!! Form::select('groupe_id[]',$groupe,old('groupe_id'),['class' =>'form-control input-sm ', 'id'=>'groupe_list','multiple']) !!}
           </div>
         </div>
+
           <div class="form-group">
               <div class="col-sm-12">
               {!! Form::label('tel','Téléphone') !!}

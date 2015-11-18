@@ -17,9 +17,10 @@ class Groupe extends Model {
 
 	protected $guarded = ['timestamps'];
 
-	public function societe(){
-		return $this->hasMany('App\Societe');
-	}
+	public function societes(){
+        return $this->belongsToMany('App\Societe')->withTimestamps();
+    }
+
 
 	public function contact(){
 		return $this->hasMany('App\Contact');

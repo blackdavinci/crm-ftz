@@ -45,7 +45,7 @@
 	  			@endif
 	  			 
 	   			<td><span class="title-profil">{!! Form::label('groupecrm','Groupe CRM') !!}</td>
-	  			<td><span >{!! Form::select('groupe_id',$groupe,$groupecrm,['class' =>'form-control input-sm']) !!}</td>
+	  			<td><span >{!! Form::select('groupe_id[]',$groupe,old('groupe_id'),['class' =>'form-control input-sm ', 'id'=>'groupe_list','multiple']) !!}</td>
 	  		</tr>
 	  		<tr> 
 	  			<td><span class="title-profil">{!! Form::label('effectif_clt','Effectif') !!}</td>

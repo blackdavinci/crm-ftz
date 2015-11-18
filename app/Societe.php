@@ -39,9 +39,8 @@ class Societe extends Model {
         return $this->hasMany('App\Devis');
     }
 
-    public function groupe(){
-
-        return $this->belongsTo('App\Groupe');
+    public function groupes(){
+        return $this->belongsToMany('App\Groupe')->withTimestamps();
     }
 
   

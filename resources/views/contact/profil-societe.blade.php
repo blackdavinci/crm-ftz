@@ -78,11 +78,11 @@
 	  		<tr> 
 	  			<td><span class="title-profil">Groupe CRM</span></td>
 	  			<td>
-	  				@if(isset($profil->groupe->nom_groupe))
-	  					<span class="info">{{ $profil->groupe->nom_groupe.' '.$profil->groupe->date_groupe }}</span>
-	  				@else 
-	  					<span class="info">Non Assignée </span>
-	  				@endif
+	  				@foreach($profil->groupes as $groupe)
+		  				<p style="float:left; margin-right:5px;">
+	  						<a href="{{ route('groupe.show',[$groupe->id])}}">{{ $groupe->nom_groupe }}</a>
+	  					</p>
+	  				@endforeach
 	  			</td>
 	  		</tr>
 	  		<tr> 
