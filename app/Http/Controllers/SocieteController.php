@@ -158,11 +158,7 @@ class SocieteController extends Controller {
 
 		$check = DB::table('societes')->select('nom_clt')->where('nom_clt',$societecheck)->count();
 
-
-
 		if($check==0 ){
-
-			
 
 			$data = $request->except(['groupe_id','add_contact']);	
 
@@ -278,11 +274,12 @@ class SocieteController extends Controller {
 		$groupe = [];
 		$groupe['null'] = '';
 		$profil = Societe::findOrFail($id);
-		$ListGroupeCRM = DB::table('groupes')->select('id','nom_groupe','date_groupe')->get();
+		$ListGroupeCRM = DB::table('groupes')->select('id','nom_groupe','date_groupe')->where('etat',1)->get();
+		$groupes_list = $profil->groupes->lists('id')->toArray();
 		foreach ($ListGroupeCRM as $key => $value) {
 			$groupe[$value->id] = $value->nom_groupe.' '.$value->date_groupe;
 		}
-		return view('contact.edit-societe',compact('actif','profil','groupe'));
+		return view('contact.edit-societe',compact('actif','profil','groupe','groupes_list'));
 	}
 
 	/**
@@ -299,6 +296,8 @@ class SocieteController extends Controller {
 
 		$profil = Societe::findOrFail($id);
 		$profil->update($request->all());
+
+		$profil->groupes()->sync($request->input('groupe_id'));
 
 		// $params['body']  = ['nom'=>$request->input('nom_clt'),'pays'=>$request->input('pays_clt')];
 

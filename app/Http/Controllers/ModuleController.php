@@ -161,7 +161,6 @@ class ModuleController extends Controller {
 		$data = $request->except(['produit_id']);
 		$module->update($data);
 		$module->produits()->sync($request->input('produit_id')); 
-
 	
 		return  redirect(route('module.show', $id));
 	}

@@ -27,7 +27,12 @@ class FactureController extends Controller {
 	 */
 	public function index()
 	{
-		//
+
+		$facture = Facture::with('livraison')->where('etat',1)->orderBy('created_at','desc')->get();
+		$actif = 'gescom';
+		$type = 2;
+		$tri = 'aucun';
+		return view('gescom.docs', compact('actif','facture','type','tri'));
 	}
 
 	/**
@@ -81,7 +86,7 @@ class FactureController extends Controller {
 			
 		$societedata = DB::table('societedatas')->select('id')->orderBy('created_at', 'desc')->first();
 
-		$data = ['num_facture'=>$num_facture,'devis_id'=>$profil->id,'num_da'=>$da,'livraison_id'=>$profil->id,
+		$data = ['num_facture'=>$num_facture,'livraison_id'=>$profil->id,'devis_id'=>$profil->devis_id,'num_da'=>$da,'livraison_id'=>$profil->id,
 					'suivi_facture'=>$profil->suivi_bl,'destinataire'=>$profil->destinataire,'adresse_dest'=>$profil->adresse_dest,
 					'pays_dest'=>$profil->pays_dest,'ville_dest'=>$profil->ville_dest,'tel_dest'=>$profil->tel_dest,'ref_dest'=>$profil->ref_dest,
 					'num_cmd'=>$profil->num_cmd,'livraison_modal'=>$num_facture,'contact_dest'=>$profil->contact_dest,'societedata_id'=>$societedata->id,'fax_dest'=>$profil->fax_dest,
@@ -121,8 +126,12 @@ class FactureController extends Controller {
 		$produit = Produit::findOrFail($produit_id);
 		$modules = $profil->modules;
 
+		// foreach ($modules as $key => $value) {
+		// 	var_dump($value->nom_module);
+		// }
+		// dd();
 		
-		return view('gescom.detail-facture', compact('actif','profil','modules'));
+		return view('gescom.detail-facture', compact('actif','profil','modules','produit'));
 		
 	}
 

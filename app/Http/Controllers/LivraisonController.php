@@ -29,7 +29,6 @@ class LivraisonController extends Controller {
 	{
 		//
 		$livraison = Livraison::with('devis')->where('etat',1)->orderBy('created_at','desc')->get();
-		// $devis = Devis::with('societe','contact','gescom')->where('etat_devis',1)->orderBy('created_at','desc')->get();
 		$actif = 'gescom';
 		$type = 1;
 		$tri = 'aucun';
